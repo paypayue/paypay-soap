@@ -2,7 +2,7 @@
     "name": "paypayue/paypay-soap-php",
     "description": "PHP helper library for PayPay SOAP API integration.",
     "keywords": ["paypay", "payments", "api", "soap","multibanco"],
-    "homepage": "https://www.paypay.pt/",
+    "homepage": "https://github.com/paypayue/paypay-soap-php",
     "type": "library",
     "license": "MIT",
     "authors": [
@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=5.5.0",
+        "php": ">=5.4.0",
         "ext-soap": "*"
     },
     "autoload": {
