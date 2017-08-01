@@ -12,12 +12,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "ext-soap": "*"
-    },
-    "require-dev": {
-        "php": ">=5.5.0",
-        "ext-soap": "*"
+        "php": ">=5.4.0"
     },
     "autoload": {
         "psr-4": { "PayPay\\": "src/" }
