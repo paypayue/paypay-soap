@@ -13,7 +13,6 @@ class Configuration
     private $clientId = null;
     private $platformCode = null;
     private $langCode = "PT";
-    private $timeout = 30;
 
     /**
      *
@@ -34,18 +33,27 @@ class Configuration
         $this->assertHasAccessParams();
     }
 
+    public static function fromArray($attribs=array())
+    {
+        return new self($attribs);
+    }
+
     private function assertHasAccessParams()
     {
         if (empty($this->environment)) {
-            throw new Exception\Configuration('PayPay\\Configuration::environment needs to be set.');
-        } else if ($this->isValidEnvironment($this->environment)) {
-            throw new Exception\Configuration('PayPay\\Configuration::environment is not a valid environment.');
-        } else if (empty($this->clientId)) {
-            throw new Exception\Configuration('PayPay\\Configuration::clientId needs to be set.');
-        } else if (empty($this->privateKey)) {
-            throw new Exception\Configuration('PayPay\\Configuration::privateKey needs to be set.');
-        } else if (empty($this->platformCode)) {
-            throw new Exception\Configuration('PayPay\\Configuration::platformCode needs to be set.');
+            throw new Exceptions\Configuration('PayPay\\Configuration::environment needs to be set.');
+        }
+        if (!$this->isValidEnvironment($this->environment)) {
+            throw new Exceptions\Configuration($this->environment.' is not a valid environment.');
+        }
+        if (empty($this->clientId)) {
+            throw new Exceptions\Configuration('PayPay\\Configuration::clientId needs to be set.');
+        }
+        if (empty($this->privateKey)) {
+            throw new Exceptions\Configuration('PayPay\\Configuration::privateKey needs to be set.');
+        }
+        if (empty($this->platformCode)) {
+            throw new Exceptions\Configuration('PayPay\\Configuration::platformCode needs to be set.');
         }
     }
 
@@ -57,42 +65,7 @@ class Configuration
         return in_array($value, self::$validEnvironments);
     }
 
-    public function getClientId()
-    {
-        return $this->clientId;
-    }
-
-    public function getPrivateKey()
-    {
-        return $this->privateKey;
-    }
-
-    private function setTimeout($value)
-    {
-        $this->timeout = $value;
-    }
-
-    public function getTimeout()
-    {
-        return $this->timeout;
-    }
-
-    public function wsdlUrl()
-    {
-        return sprintf('%s/%s', $this->endpointUrl(), 'wsdl');
-    }
-
-    public function serverUrl()
-    {
-        return sprintf('%s/%s', $this->endpointUrl(), 'server');
-    }
-
-    public function langCode()
-    {
-        return $this->langCode;
-    }
-
-    private function endpointUrl()
+    public function endpointUrl($type = '')
     {
         switch ($this->environment) {
             case 'production':
@@ -104,21 +77,25 @@ class Configuration
                 break;
         }
 
+        if ($type) {
+            $serverName .= DIRECTORY_SEPARATOR . $type;
+        }
+
         return $serverName;
     }
 
-    private function generateAccessToken($date)
+    public function generateAccessToken($date)
     {
         $dataAtual = $date->format("d-m-Y H:i:s");
 
-        return hash('sha256', $this->getPrivateKey() . $dataAtual);
+        return hash('sha256', $this->privateKey . $dataAtual);
     }
 
     public function asArray()
     {
         return array(
-            'wsdl'         => $this->wsdlUrl(),
-            'server'       => $this->serverUrl(),
+            'wsdl'         => $this->endpointUrl('wsdl'),
+            'server'       => $this->endpointUrl('server'),
             'privateKey'   => $this->privateKey,
             'clientId'     => $this->clientId,
             'platformCode' => $this->platformCode,

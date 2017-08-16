@@ -1,4 +1,5 @@
 <?php
+
 namespace PayPay\Exception;
 
 /**
@@ -7,8 +8,8 @@ namespace PayPay\Exception;
  * @package    PayPay
  * @subpackage Exception
  */
-final class CheckWebPayment extends \Exception {
-
+final class CheckWebPayment extends \Exception
+{
     public function __construct(ResponsePaymentDetails $rgp)
     {
         parent::__construct($rgp->requestState->message, $rgp->requestState->code);

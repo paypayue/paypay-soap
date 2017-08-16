@@ -1,0 +1,62 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "fa265c59629626986a15608654d47476",
+    "packages": [
+        {
+            "name": "paypayue/paypay-soap-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/paypayue/paypay-soap-php.git",
+                "reference": "e8e3d82afd92f027226803298f83024f434434b6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/paypayue/paypay-soap-php/zipball/e8e3d82afd92f027226803298f83024f434434b6",
+                "reference": "e8e3d82afd92f027226803298f83024f434434b6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "PayPay\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PayPay",
+                    "homepage": "https://www.paypay.pt/"
+                }
+            ],
+            "description": "PHP helper library for PayPay SOAP API integration.",
+            "homepage": "https://github.com/paypayue/paypay-soap-php",
+            "keywords": [
+                "api",
+                "multibanco",
+                "payments",
+                "paypay",
+                "soap"
+            ],
+            "time": "2017-08-02 08:49:43"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "dev",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
