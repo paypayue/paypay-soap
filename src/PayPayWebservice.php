@@ -7,7 +7,7 @@ final class PayPayWebservice extends \SoapClient {
     private $response;
     private $configParams;
 
-    public function __construct(Configuration $config, Structures\RequestEntity $entity)
+    public function __construct(Configuration $config, Structure\RequestEntity $entity)
     {
         $configParams             = $config->asArray();
         $PAYPAY_WEBSERVICE_WSDL   = $configParams['wsdl'        ];
@@ -18,25 +18,24 @@ final class PayPayWebservice extends \SoapClient {
         $PAYPAY_WEBSERVICE_LANG   = $configParams['langCode'    ];
 
         $classmap = array(
-            'RequestEntity'                     => '\PayPay\Structure\RequestEntity',
-            'ResponseIntegrationState'          => '\PayPay\Structure\ResponseIntegrationState',
-            'RequestInterval'                   => '\PayPay\Structure\RequestInterval',
-            'RequestPaymentReference'           => '\PayPay\Structure\RequestPaymentReference',
-            'ResponseEntityPayments'            => '\PayPay\Structure\ResponseEntityPayments',
-            'ResponseEntityPaymentReferences'   => '\PayPay\Structure\ResponseEntityPaymentReferences',
-            'ResponseEntityPaymentsDetails'     => '\PayPay\Structure\ResponseEntityPaymentsDetails',
-            'RequestCreditCardPayment'          => '\PayPay\Structure\RequestCreditCardPayment',
-            'ResponseCreditCardPayment'         => '\PayPay\Structure\ResponseCreditCardPayment',
-            'RequestReferenceDetails'           => '\PayPay\Structure\RequestReferenceDetails',
-            'ResponseGetPayment'                => '\PayPay\Structure\ResponseGetPayment'
+            'RequestEntity'                   => '\PayPay\Structure\RequestEntity',
+            'ResponseIntegrationState'        => '\PayPay\Structure\ResponseIntegrationState',
+            'RequestInterval'                 => '\PayPay\Structure\RequestInterval',
+            'RequestPaymentReference'         => '\PayPay\Structure\RequestPaymentReference',
+            'ResponseEntityPayments'          => '\PayPay\Structure\ResponseEntityPayments',
+            'ResponseEntityPaymentReferences' => '\PayPay\Structure\ResponseEntityPaymentReferences',
+            'ResponseEntityPaymentsDetails'   => '\PayPay\Structure\ResponseEntityPaymentsDetails',
+            'RequestCreditCardPayment'        => '\PayPay\Structure\RequestCreditCardPayment',
+            'ResponseCreditCardPayment'       => '\PayPay\Structure\ResponseCreditCardPayment',
+            'RequestReferenceDetails'         => '\PayPay\Structure\RequestReferenceDetails',
+            'ResponseGetPayment'              => '\PayPay\Structure\ResponseGetPayment'
         );
 
         $options = array (
-            'classmap'           => $classmap,
-            'location'           => $PAYPAY_WEBSERVICE_SERVER
+            'classmap'     => $classmap,
+            'location'     => $PAYPAY_WEBSERVICE_SERVER,
+            'soap_version' => SOAP_1_2
         );
-
-
 
         $this->entity = $entity;
 
@@ -45,7 +44,7 @@ final class PayPayWebservice extends \SoapClient {
 
     }
 
-    public static function init(\Configuration $config)
+    public static function init(Configuration $config)
     {
         $configParams = $config->asArray();
 
@@ -53,7 +52,7 @@ final class PayPayWebservice extends \SoapClient {
         $date->modify("+10 minutes");
         $dataAtual = $date->format("d-m-Y H:i:s");
 
-        $entity = new \Structures\RequestEntity(
+        $entity = new Structure\RequestEntity(
             $configParams['platformCode'],
             $config->generateAccessToken($date),
             $dataAtual,
@@ -70,16 +69,15 @@ final class PayPayWebservice extends \SoapClient {
      * @param  array               $paymentData Payment information ex: amount
      * @return ResponseGetPayment  $result      Webservice response
      */
-    public function createPaymentReference($paymentData)
+    public function createPaymentReference(Structure\RequestReferenceDetails $paymentData)
     {
-        $requestPayment = new \Structures\RequestReferenceDetails($paymentData);
-        $this->response = parent::createPaymentReference($this->entity, $requestPayment);
+        $this->response = parent::createPaymentReference($this->entity, $paymentData);
 
         /**
          * Se integração com o paypay tiver algum problema de configuração no PayPay.
          */
         if ($this->response->integrationState->state == 0) {
-            throw new \Exception\IntegrationState($this->response->integrationState);
+            throw new Exception\IntegrationState($this->response);
         }
 
         /**
@@ -87,7 +85,7 @@ final class PayPayWebservice extends \SoapClient {
          * (ex: montante máximo diário, por referência, etc.)
          */
         if ($this->response->state == 0) {
-            throw new \Exception\CreatePaymentReference($this->response);
+            throw new Exception\CreatePaymentReference($this->response);
         }
 
         return $this->response;
@@ -97,25 +95,20 @@ final class PayPayWebservice extends \SoapClient {
     /**
      * Calls PayPay Webservice to request a credit card payment through.
      *
-     * @param  array $orderData          The order details containing the amount and user data.
+     * @param  array $orderData          The order details containing the amount, return url, cancel url and
+     *                                   other request parameters.
+     * @param  array $buyerData          The buyer details
      * @return ResponseCreditCardPayment The webservice response containing the relevant payment data.
      */
-    public function doWebPayment($orderData)
+    public function doWebPayment($requestWebPayment)
     {
-        $order            = new \Structures\RequestPaymentOrder($orderData);
-        $buyerInfo        = new \Structures\RequestBuyerInfo($orderData);
-        $returnUrlSuccess = $orderData['RETURN_URL'];
-        $returnUrlCancel  = $orderData['CANCEL_URL'];
-        $method           = $orderData['method'    ];
-        $payment          = new RequestCreditCardPayment($order, $returnUrlSuccess, $returnUrlCancel, $method, $buyerInfo);
-
-        $this->response = parent::doWebPayment($this->entity, $payment);
+        $this->response = parent::doWebPayment($this->entity, $requestWebPayment);
 
         /**
          * Se a resposta retornar algum erro previsto.
          */
         if ($this->response->requestState->state == 0) {
-            throw new \Exception\DoWebPayment($this->response);
+            throw new Exception\DoWebPayment($this->response);
         }
 
         return $this->response;
@@ -129,12 +122,12 @@ final class PayPayWebservice extends \SoapClient {
      */
     public function checkWebPayment($token, $transactionId)
     {
-        $requestPayment = new \Structures\RequestPaymentDetails($token, $transactionId);
+        $requestPayment = new Structure\RequestPaymentDetails($token, $transactionId);
 
         $this->response = parent::checkWebPayment($this->entity, $requestPayment);
 
         if ($this->response->requestState->state == 0) {
-            throw new \Exception\CheckWebPayment($this->response);
+            throw new Exception\CheckWebPayment($this->response);
         }
 
         return $this->response;
@@ -148,12 +141,12 @@ final class PayPayWebservice extends \SoapClient {
      */
     public function getEntityPayments($startDate, $endDate)
     {
-        $requestInterval = new \Structures\RequestInterval($startDate, $endDate);
+        $requestInterval = new Structure\RequestInterval($startDate, $endDate);
 
         $this->response = parent::getEntityPayments($this->entity, $requestInterval);
 
         if ($this->response->integrationState->state == 0) {
-            throw new \Exception\IntegrationState($this->response->integrationState);
+            throw new Exception\IntegrationState($this->response);
         }
 
         return $this->response;
@@ -175,10 +168,10 @@ final class PayPayWebservice extends \SoapClient {
      */
     public function checkEntityPayments($payments = array())
     {
-        $requestReferenceDetails = new \Structures\RequestEntityPayments();
+        $requestReferenceDetails = new Structure\RequestEntityPayments();
         if ($payments) {
             foreach ($payments as $key => $value) {
-                $requestPayment = new \Structures\RequestReferenceDetails(
+                $requestPayment = new Structure\RequestReferenceDetails(
                     array(
                         'reference' => $value['reference'],
                         'paymentId' => $value['paymentId']
@@ -191,7 +184,7 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::checkEntityPayments($this->entity, $requestReferenceDetails);
 
         if ($this->response->requestState->state == 0) {
-            throw new \Exception\CheckEntityPayments($this->response);
+            throw new Exception\CheckEntityPayments($this->response);
         }
 
         return $this->response;

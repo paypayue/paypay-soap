@@ -8,11 +8,12 @@ namespace PayPay;
  */
 class Configuration
 {
-    private $environment = null;
-    private $privateKey = null;
-    private $clientId = null;
+    private $environment  = null;
+    private $endpointUrl  = null;
+    private $privateKey   = null;
+    private $clientId     = null;
     private $platformCode = null;
-    private $langCode = "PT";
+    private $langCode     = "PT";
 
     /**
      *
@@ -20,6 +21,7 @@ class Configuration
      * @var array valid environments, used for validation
      */
     private static $validEnvironments = [
+        'development',
         'testing',
         'production',
     ];
@@ -41,47 +43,50 @@ class Configuration
     private function assertHasAccessParams()
     {
         if (empty($this->environment)) {
-            throw new Exceptions\Configuration('PayPay\\Configuration::environment needs to be set.');
+            throw new Exceptions\Configuration('Configuration::environment needs to be set.');
         }
-        if (!$this->isValidEnvironment($this->environment)) {
+        if (!$this->isValidEnvironment()) {
             throw new Exceptions\Configuration($this->environment.' is not a valid environment.');
         }
+        if (empty($this->endpointUrl())) {
+            throw new Exceptions\Configuration('Configuration::endpointUrl needs to be set.');
+        }
         if (empty($this->clientId)) {
-            throw new Exceptions\Configuration('PayPay\\Configuration::clientId needs to be set.');
+            throw new Exceptions\Configuration('Configuration::clientId needs to be set.');
         }
         if (empty($this->privateKey)) {
-            throw new Exceptions\Configuration('PayPay\\Configuration::privateKey needs to be set.');
+            throw new Exceptions\Configuration('Configuration::privateKey needs to be set.');
         }
         if (empty($this->platformCode)) {
-            throw new Exceptions\Configuration('PayPay\\Configuration::platformCode needs to be set.');
+            throw new Exceptions\Configuration('Configuration::platformCode needs to be set.');
         }
     }
 
     /**
      * Do not use this method directly. Pass in the environment to the constructor.
      */
-    private function isValidEnvironment($value)
+    private function isValidEnvironment()
     {
-        return in_array($value, self::$validEnvironments);
+        return in_array($this->environment, self::$validEnvironments);
     }
 
-    public function endpointUrl($type = '')
+    private function endpointUrl($type = '')
     {
         switch ($this->environment) {
             case 'production':
-                $serverName = 'https://www.paypay.pt/paypay/paypayservices/paypayservices_c';
+                $this->endpointUrl = 'https://www.paypay.pt/paypay/paypayservices/paypayservices_c';
                 break;
             case 'testing':
+                $this->endpointUrl = 'https://paypay.acin.pt/paypaybeta/paypayservices/paypayservices_c';
+            case 'development':
             default:
-                $serverName = 'https://paypay.acin.pt/paypaybeta/paypayservices/paypayservices_c';
                 break;
         }
-
         if ($type) {
-            $serverName .= DIRECTORY_SEPARATOR . $type;
+            return $this->endpointUrl . DIRECTORY_SEPARATOR . $type;
         }
 
-        return $serverName;
+        return $this->endpointUrl;
     }
 
     public function generateAccessToken($date)
