@@ -3,6 +3,10 @@ namespace PayPay\Structure;
 
 class RequestCreditCardPayment {
 
+    const METHOD_CREDIT_CARD = 'CC';
+    const METHOD_MULTIBANCO  = 'MB';
+    const METHOD_MB_WAY      = 'MW';
+
     /** @var RequestPaymentOrder */
     public $order;
 
@@ -15,6 +19,7 @@ class RequestCreditCardPayment {
     /**
      * Forma de pagamento:
      * CC - Cartão de crédito;
+     * MB - Multibanco;
      * MW - MB WAY;
      * @var String
      */
@@ -25,10 +30,10 @@ class RequestCreditCardPayment {
 
     public function __construct(
         $order,
-        $returnUrlSuccess = "",
-        $returnUrlCancel = "",
-        $buyer = "",
-        $method = null
+        $returnUrlSuccess,
+        $returnUrlCancel  = "",
+        $method           = 'CC',
+        $buyer            = null
     ) {
         $this->order            = $order;
         $this->returnUrlSuccess = $returnUrlSuccess;
@@ -38,5 +43,3 @@ class RequestCreditCardPayment {
     }
 
 }
-
-?>

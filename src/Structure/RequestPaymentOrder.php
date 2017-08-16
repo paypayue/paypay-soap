@@ -15,14 +15,22 @@ class RequestPaymentOrder
     /** @var String */
     public $hash;
 
+    /** @var string */
+    public $productCode;
+
+    /** @var string */
+    public $productDesc;
+
     public function __construct(
         $order
     )
     {
-        $this->reference    = !empty($order['reference']) ? $order['reference'] : '';
-        $this->hash         = !empty($order['hash']) ? $order['hash'] : '';
-        $this->amount       = !empty($order['amount']) ? $order['amount'] : '';
+        $this->reference     = !empty($order['reference']) ? $order['reference'] : '';
+        $this->hash          = !empty($order['hash']) ? $order['hash'] : '';
+        $this->amount        = !empty($order['amount']) ? $order['amount'] : '';
         $this->idTransaction = !empty($order['idTransaction']) ? $order['idTransaction'] : '';
+        $this->productCode   = !empty($order['productCode']) ? $order['productCode'] : '';
+        $this->productDesc   = !empty($order['productDesc']) ? $order['productDesc'] : '';
     }
 
 }
