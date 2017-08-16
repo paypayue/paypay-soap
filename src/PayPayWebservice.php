@@ -18,17 +18,17 @@ final class PayPayWebservice extends \SoapClient {
         $PAYPAY_WEBSERVICE_LANG   = $configParams['langCode'    ];
 
         $classmap = array(
-            'RequestEntity'                     => '\PayPay\Structures\RequestEntity',
-            'ResponseIntegrationState'          => '\PayPay\Structures\ResponseIntegrationState',
-            'RequestInterval'                   => '\PayPay\Structures\RequestInterval',
-            'RequestPaymentReference'           => '\PayPay\Structures\RequestPaymentReference',
-            'ResponseEntityPayments'            => '\PayPay\Structures\ResponseEntityPayments',
-            'ResponseEntityPaymentReferences'   => '\PayPay\Structures\ResponseEntityPaymentReferences',
-            'ResponseEntityPaymentsDetails'     => '\PayPay\Structures\ResponseEntityPaymentsDetails',
-            'RequestCreditCardPayment'          => '\PayPay\Structures\RequestCreditCardPayment',
-            'ResponseCreditCardPayment'         => '\PayPay\Structures\ResponseCreditCardPayment',
-            'RequestReferenceDetails'           => '\PayPay\Structures\RequestReferenceDetails',
-            'ResponseGetPayment'                => '\PayPay\Structures\ResponseGetPayment'
+            'RequestEntity'                     => '\PayPay\Structure\RequestEntity',
+            'ResponseIntegrationState'          => '\PayPay\Structure\ResponseIntegrationState',
+            'RequestInterval'                   => '\PayPay\Structure\RequestInterval',
+            'RequestPaymentReference'           => '\PayPay\Structure\RequestPaymentReference',
+            'ResponseEntityPayments'            => '\PayPay\Structure\ResponseEntityPayments',
+            'ResponseEntityPaymentReferences'   => '\PayPay\Structure\ResponseEntityPaymentReferences',
+            'ResponseEntityPaymentsDetails'     => '\PayPay\Structure\ResponseEntityPaymentsDetails',
+            'RequestCreditCardPayment'          => '\PayPay\Structure\RequestCreditCardPayment',
+            'ResponseCreditCardPayment'         => '\PayPay\Structure\ResponseCreditCardPayment',
+            'RequestReferenceDetails'           => '\PayPay\Structure\RequestReferenceDetails',
+            'ResponseGetPayment'                => '\PayPay\Structure\ResponseGetPayment'
         );
 
         $options = array (

@@ -1,5 +1,5 @@
 <?php
-namespace PayPay\Structures;
+namespace PayPay\Structure;
 
 class ResponseCreditCardPayment
 {
