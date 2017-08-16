@@ -1,4 +1,5 @@
 <?php
+
 namespace PayPay\Exception;
 
 /**
@@ -7,8 +8,8 @@ namespace PayPay\Exception;
  * @package    PayPay
  * @subpackage Exception
  */
-final class CheckEntityPayments extends \Exception {
-
+final class CheckEntityPayments extends \Exception
+{
     public function __construct(ResponseEntityPaymentsDetails $response)
     {
         parent::__construct($response->state->message, $response->state->code);
