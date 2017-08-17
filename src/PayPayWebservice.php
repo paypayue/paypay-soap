@@ -7,17 +7,32 @@ final class PayPayWebservice extends \SoapClient {
     private $response;
     private $configParams;
 
-    public function __construct(Configuration $config, Structure\RequestEntity $entity)
-    {
-        $configParams             = $config->asArray();
-        $PAYPAY_WEBSERVICE_WSDL   = $configParams['wsdl'        ];
-        $PAYPAY_WEBSERVICE_SERVER = $configParams['server'      ];
-        $PAYPAY_WEBSERVICE_CODE   = $configParams['platformCode'];
-        $PAYPAY_WEBSERVICE_KEY    = $configParams['privateKey'  ];
-        $PAYPAY_WEBSERVICE_NIF    = $configParams['clientId'    ];
-        $PAYPAY_WEBSERVICE_LANG   = $configParams['langCode'    ];
+    /**
+     * @var Configuration
+     */
+    private $config;
 
-        $classmap = array(
+
+    /**
+     * @var array
+     */
+    private static $ENDPOINTS = array(
+        'production' => 'https://www.paypay.pt/paypay/paypayservices/paypayservices_c',
+        'testing'    => 'https://paypay.acin.pt/paypaybeta/paypayservices/paypayservices_c'
+    );
+
+    /**
+     * @var array
+     */
+    private static $DIR = array(
+        'wsdl'   => '/wsdl',
+        'server' => '/server'
+    );
+
+    /**
+     * @var array
+     */
+    private static $CLASSMAP = array(
             'RequestEntity'                   => '\PayPay\Structure\RequestEntity',
             'ResponseIntegrationState'        => '\PayPay\Structure\ResponseIntegrationState',
             'RequestInterval'                 => '\PayPay\Structure\RequestInterval',
@@ -29,19 +44,45 @@ final class PayPayWebservice extends \SoapClient {
             'ResponseCreditCardPayment'       => '\PayPay\Structure\ResponseCreditCardPayment',
             'RequestReferenceDetails'         => '\PayPay\Structure\RequestReferenceDetails',
             'ResponseGetPayment'              => '\PayPay\Structure\ResponseGetPayment'
-        );
+    );
+
+    public function __construct(Configuration $config, Structure\RequestEntity $entity)
+    {
+        $this->config = $config;
+
 
         $options = array (
-            'classmap'     => $classmap,
-            'location'     => $PAYPAY_WEBSERVICE_SERVER,
+            'classmap'     => self::$CLASSMAP,
+            'location'     => self::endpointUrl('server'),
             'soap_version' => SOAP_1_2
         );
 
         $this->entity = $entity;
 
-        libxml_disable_entity_loader(false);
-        parent::__construct($PAYPAY_WEBSERVICE_WSDL, $options);
+        // libxml_disable_entity_loader(false);
+        parent::__construct(self::endpointUrl('wsdl'), $options);
 
+    }
+
+    private function endpointUrl($type = '')
+    {
+        $env = $this->config->getEnvironment();
+        if (!isset(self::$ENDPOINTS[$env])) {
+            if (!defined('PAYPAY_WEBSERVICE_URL')) {
+                throw new InvalidArgumentException(
+                    "Theres is no endpoint for the current environment, use the constant PAYPAY_WEBSERVICE_URL"
+                );
+            }
+            $endpoint = constant('PAYPAY_WEBSERVICE_URL');
+        } else {
+            $endpoint = self::$ENDPOINTS[$env];
+        }
+
+        if ($type) {
+            return $endpoint . self::$DIR[$type];
+        }
+
+        return $endpoint;
     }
 
     public static function init(Configuration $config)
@@ -62,6 +103,7 @@ final class PayPayWebservice extends \SoapClient {
 
         return new self($config, $entity);
     }
+
 
     /**
      * Creates a new payment reference via PayPay.

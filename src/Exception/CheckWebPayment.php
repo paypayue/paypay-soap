@@ -3,7 +3,7 @@
 namespace PayPay\Exception;
 
 /**
- * Raised when the Braintree library is not completely configured.
+ * Raised when the checkWebPayment method returns an error code.
  *
  * @package    PayPay
  * @subpackage Exception

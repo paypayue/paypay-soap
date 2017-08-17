@@ -3,7 +3,7 @@
 namespace PayPay\Exception;
 
 /**
- * Raised when the
+ * Raised when the client webservice integration data is not correct.
  *
  * @package    PayPay
  * @subpackage Exception
