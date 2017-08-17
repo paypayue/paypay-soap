@@ -3,12 +3,13 @@
 namespace PayPay\Exception;
 
 /**
- * Raised when the PayPay library is not completely configured.
+ * Raised when Webhook request is invalid or incomplete.
  *
  * @package    PayPay
  * @subpackage Exception
  * @see        Configuration
  */
-final class Configuration extends \Exception
+final class Webhook extends \Exception
 {
+
 }
