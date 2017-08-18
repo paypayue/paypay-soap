@@ -27,10 +27,10 @@ Configure the environment with your platform credentials, for example:
 ```php
 \PayPay\Configuration::setup(
     array(
-        'environment'  => 'testing',
+        'environment'  => 'testing', // or production
         'platformCode' => '0004',
         'privateKey'   => 'Y1JgnTGN2lMOz8OXLs0s',
-        'clientId'     => '503129445',
+        'clientId'     => '503129445', // usually the client NIF
         'langCode'     => 'PT'
     )
 );
