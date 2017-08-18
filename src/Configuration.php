@@ -36,7 +36,7 @@ class Configuration
         $this->assertHasAccessParams();
     }
 
-    public static function fromArray($attribs=array())
+    public static function setup($attribs=array())
     {
         return new self($attribs);
     }
