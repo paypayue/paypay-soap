@@ -9,7 +9,7 @@ define("PAYPAY_WEBSERVICE_URL", "http://10.11.15.59/wilmer/paypay/paypayservices
 
 require 'vendor/autoload.php';
 
-$config = \PayPay\Configuration::fromArray(
+$config = \PayPay\Configuration::setup(
     array(
         'environment'  => 'development',
         'privateKey'   => 'DyLyeIKkclr8nl2hyW2e06j8',

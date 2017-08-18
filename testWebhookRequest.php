@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 
 require 'vendor/autoload.php';
 
-$config = \PayPay\Configuration::fromArray(
+$config = \PayPay\Configuration::setup(
     array(
         'environment'  => 'development',
         'privateKey'   => 'DyLyeIKkclr8nl2hyW2e06j8',
