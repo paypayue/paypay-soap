@@ -1,11 +1,15 @@
 <?php
 namespace PayPay;
 
+
+/**
+ *
+ * PayPay Webservice Soap Client implementation
+ *
+ */
 final class PayPayWebservice extends \SoapClient {
 
-    private $requestParams;
     private $response;
-    private $configParams;
 
     /**
      * @var Configuration
@@ -53,8 +57,7 @@ final class PayPayWebservice extends \SoapClient {
 
         $options = array (
             'classmap'     => self::$CLASSMAP,
-            'location'     => self::endpointUrl('server'),
-            'soap_version' => SOAP_1_2
+            'location'     => self::endpointUrl('server')
         );
 
         $this->entity = $entity;
@@ -104,6 +107,36 @@ final class PayPayWebservice extends \SoapClient {
         return new self($config, $entity);
     }
 
+    /**
+     * Checks the current entity integration state
+     * @return ResponseIntegrationState
+     */
+    public function checkIntegrationState()
+    {
+        $this->response = parent::checkIntegrationState($this->entity);
+
+        return $this->response;
+    }
+
+
+    /**
+     * Subscribe to a webhook to receive callbacks from events ocurred at PayPay.
+     * @param  Structure\RequestWebhook $requestWebhook
+     * @return Structure\ResponseWebhook
+     */
+    public function subscribeToWebhook(Structure\RequestWebhook $requestWebhook)
+    {
+        $this->response = parent::subscribeToWebhook($this->entity, $requestWebhook);
+
+        if (in_array($this->response->integrationState->code, Exception\SubscribeToWebhook::$ERROR_CODES)) {
+            throw new Exception\SubscribeToWebhook(
+                $this->response->integrationState->message,
+                $this->response->integrationState->code. " "
+            );
+        }
+
+        return $this->response;
+    }
 
     /**
      * Creates a new payment reference via PayPay.

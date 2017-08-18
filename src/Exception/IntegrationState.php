@@ -12,6 +12,6 @@ final class IntegrationState extends \Exception
 {
     public function __construct($ris)
     {
-        parent::__construct($ris->integrationState->message, $ris->integrationState->code);
+        parent::__construct($ris->message, $ris->code);
     }
 }
