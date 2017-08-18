@@ -22,3 +22,16 @@ Then run the following command:
 ```sh
 $ composer install
 ```
+Configure the environment with your platform credentials, for example:
+
+```php
+\PayPay\Configuration::setup(
+    array(
+        'environment'  => 'testing',
+        'platformCode' => '0004',
+        'privateKey'   => 'Y1JgnTGN2lMOz8OXLs0s',
+        'clientId'     => '503129445',
+        'langCode'     => 'PT'
+    )
+);
+```
