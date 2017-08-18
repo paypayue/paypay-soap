@@ -2,8 +2,8 @@
 
 Official library for PayPay SOAP API integrations written in PHP.
 
-### Dependencies
-* The library requires PHP version 5.4.0 or higher and the PHP SOAP extension.
+### Requirements
+* The library requires PHP version 5.4.0 or higher and the [SOAP extension](http://php.net/manual/en/book.soap.php).
 
 ### Installation
 Get started with our PHP library by hitting the download link below.
