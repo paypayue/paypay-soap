@@ -6,7 +6,7 @@ namespace PayPay;
  * Webhook request handler
  *
  */
-class WebhookRequest
+class WebhookHandler
 {
     private $hookAction = null;
     private $hookDate   = null;

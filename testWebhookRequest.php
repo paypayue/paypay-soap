@@ -18,7 +18,7 @@ $config = \PayPay\Configuration::fromArray(
 );
 
 try {
-    $webhook = \PayPay\WebhookRequest::fromPost($config);
+    $webhook = \PayPay\WebhookHandler::fromPost($config);
     $webhook->eachPayment(function($payment) {
         var_dump($payment);
     });

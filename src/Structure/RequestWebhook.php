@@ -3,6 +3,8 @@ namespace PayPay\Structure;
 
 class RequestWebhook
 {
+    const PAYMENT_CONFIRMED = 'payment_confirmed';
+
     /** @var string */
     public $action;
 
