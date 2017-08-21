@@ -103,7 +103,7 @@ try {
 var_dump($response);
 ```
 
-## Processing payments by webhook
+## Processing payments by Webhook
 Use the following method to supply a url that will process all successful payments.
 ```php
 
