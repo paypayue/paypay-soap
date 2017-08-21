@@ -128,8 +128,6 @@ try {
     http_response_code($e->getCode());
     echo $e->getMessage();
 }
-
-var_dump($_POST);
 ```
 Note:
 * PayPay expects a ```HTTP 200 OK``` header in the response of this request to indicate that the payments we're received successfully. Otherwise, we will retry calling your url 3 times within 30 minute intervals. 
