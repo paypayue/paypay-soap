@@ -128,7 +128,7 @@ You can use the following code to jump start your payment processing.
 try {
     $webhook = \PayPay\WebhookHandler::fromPost($config);
     $webhook->eachPayment(function($payment) {
-        var_dump($payment); // save the payments for later processing
+        var_dump($payment); // loop the payments
     });
     http_response_code(200); // always return an HTTP status code.
 } catch (\PayPay\Exception\Webhook $e) {
