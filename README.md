@@ -53,8 +53,8 @@ $client = \PayPay\PayPayWebservice::init($config);
 $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     array(
         'amount'      => 1000,
-        'productCode' => 'REF123',
-        'productDesc' => 'Product description'
+        'productCode' => 'REF123', // Optional
+        'productDesc' => 'Product description' // Optional
     )
 );
 
@@ -75,8 +75,8 @@ try {
     $order = new \PayPay\Structure\RequestPaymentOrder(
         array(
             'amount'      => 1000,
-            'productCode' => 'REF123',
-            'productDesc' => 'Product description'
+            'productCode' => 'REF123', // Optional 
+            'productDesc' => 'Product description' // Optional
         )
     );
     $requestPayment = new \PayPay\Structure\RequestCreditCardPayment(
