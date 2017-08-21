@@ -45,7 +45,7 @@ $config = \PayPay\Configuration::setup(
 ```
 
 ## Creating a payment reference
-Use this method to obtain a payment reference that you can send to your customer. 
+Use this method to quickly obtain a payment reference that you can send to your customer. 
 ```php
 $client = \PayPay\PayPayWebservice::init($config);
 
