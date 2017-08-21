@@ -122,7 +122,7 @@ try {
 var_dump($response);
 ```
 
-PayPay will call your url with POST data of the payments that were confirmed.
+PayPay will make an HTTP request to your url with POST data of the payments that were confirmed.
 You can use the following code to jump start your payment processing.
 ```php
 try {
@@ -136,10 +136,10 @@ try {
     echo $e->getMessage();
 }
 ```
-Note:
-* PayPay expects a ```HTTP 200 OK``` header in the response of this request to indicate that the payments we're received successfully. Otherwise, we will retry calling your url 3 times within 30 minute intervals. 
-* PayPay may have to do repeat requests so as failsafe do check that each payment is not already processed on your side.
-* The request has a 30s timeout so it's not recommended that you do any "heavy lifting" (eg. sending emails) during this process. 
+### Additional Notes
+* PayPay expects a ```HTTP 200 OK``` header in response to the webhook request. This signals that the payments we're received successfully. Otherwise, we will retry calling your url 3 times within 30 minute intervals. 
+* Since PayPay may have to do repeat requests, as a failsafe you should check that each payment is not already processed on your side.
+* The request has a 30s timeout so it's not recommended that you do any "heavy lifting" (eg. sending emails, slow queries, etc.) during this process. 
 
 ## Documentation
 * [Official Documentation](https://paypay.pt/paypay/public/api/PAYPAY_guia_integracao.pdf) (portuguese)
