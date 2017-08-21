@@ -19,16 +19,16 @@ In your project folder run the following command:
 $ composer install
 ```
 
+Then add the following line at the beginning of your code:
+```php
+require 'vendor/autoload.php';
+```
+
 If you can't use Composer simply download our PHP library by hitting the link below then integrate it into your project.
 * [Download PHP Library](https://github.com/paypayue/paypay-soap-php/archive/master.zip)
 
 
 ### Getting started
-
-Add the following line at the beginning of your code:
-```php
-require 'vendor/autoload.php';
-```
 
 Configure the environment with your platform credentials, or use the following for testing:
 
@@ -45,6 +45,7 @@ $config = \PayPay\Configuration::setup(
 ```
 
 ### Create a payment reference
+Use this method to obtain a payment reference that you can send to your customer. 
 ```php
 $client = \PayPay\PayPayWebservice::init($config);
 
@@ -62,27 +63,31 @@ try {
 } catch (Exception $e) {
     $response = $e;
 }
+var_dump($response);
 ```
 
 
 ### Payment with redirect
+This method is recommended for instances where the payment is made straight away, such as during a checkout process.  
+
 ```php
 try {
     $order = new \PayPay\Structure\RequestPaymentOrder(
         array(
             'amount'      => 1000,
-            'productCode' => '123',
-            'productDesc' => 'DESC'
+            'productCode' => 'REF123',
+            'productDesc' => 'Product description'
         )
     );
     $requestPayment = new \PayPay\Structure\RequestCreditCardPayment(
         $order,
-        'www.paypay.pt',
-        'www.paypay.pt',
-        \PayPay\Structure\RequestCreditCardPayment::METHOD_MB_WAY
+        'http://www.your_store_url.com/return',
+        'http://www.your_store_url.com/cancel', /// optional 
+        \PayPay\Structure\RequestCreditCardPayment::METHOD_CREDIT_CARD // optional, default is credit card
     );
 
     $response = $client->doWebPayment($requestPayment);
+    // redirect to $response->url
 } catch (Exception $e) {
     $response = $e;
 }
