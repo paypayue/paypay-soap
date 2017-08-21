@@ -9,7 +9,7 @@ Official library for PayPay SOAP API integrations written in PHP.
 We recommend that you use [Composer](https://getcomposer.org/) a package manager for PHP. 
 In the composer.json file in your project add:
 
-```sh
+```javascript
 "require" : {
     "paypayue/paypay-soap-php" : "dev-master"
 }
@@ -56,7 +56,6 @@ try {
 ## Creating a payment reference
 Use this method to quickly obtain a payment reference that you can send to your customer. 
 ```php
-
 $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     array(
         'amount'      => 1000,
