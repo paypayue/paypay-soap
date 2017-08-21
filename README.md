@@ -96,7 +96,7 @@ try {
 var_dump($response);
 ```
 
-## Subscribing to a webhook to receive payment confirmations 
+## Processing payments by webhook
 Use the following method to supply a url that will process all successful payments.
 ```php
 $client = \PayPay\PayPayWebservice::init($config);
