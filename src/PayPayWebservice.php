@@ -57,14 +57,14 @@ final class PayPayWebservice extends \SoapClient {
 
         $options = array (
             'classmap'     => self::$CLASSMAP,
-            'location'     => self::endpointUrl('server')
+            'location'     => self::endpointUrl('server'),
+            'cache_wsdl'   => WSDL_CACHE_NONE
         );
 
         $this->entity = $entity;
 
         // libxml_disable_entity_loader(false);
         parent::__construct(self::endpointUrl('wsdl'), $options);
-
     }
 
     private function endpointUrl($type = '')
@@ -73,7 +73,7 @@ final class PayPayWebservice extends \SoapClient {
         if (!isset(self::$ENDPOINTS[$env])) {
             if (!defined('PAYPAY_WEBSERVICE_URL')) {
                 throw new InvalidArgumentException(
-                    "Theres is no endpoint for the current environment, use the constant PAYPAY_WEBSERVICE_URL"
+                    "There is no endpoint for the current environment, use the constant PAYPAY_WEBSERVICE_URL"
                 );
             }
             $endpoint = constant('PAYPAY_WEBSERVICE_URL');
@@ -115,12 +115,20 @@ final class PayPayWebservice extends \SoapClient {
     {
         $this->response = parent::checkIntegrationState($this->entity);
 
+        /**
+         * Se for encontrado algum problema de integração com a PayPay.
+         */
+        if (Exception\IntegrationState::check($this->response)) {
+            throw new Exception\IntegrationState($this->response);
+        }
+
         return $this->response;
     }
 
 
     /**
      * Subscribe to a webhook to receive callbacks from events ocurred at PayPay.
+     *
      * @param  Structure\RequestWebhook $requestWebhook
      * @return Structure\ResponseWebhook
      */
@@ -128,10 +136,20 @@ final class PayPayWebservice extends \SoapClient {
     {
         $this->response = parent::subscribeToWebhook($this->entity, $requestWebhook);
 
-        if (in_array($this->response->integrationState->code, Exception\SubscribeToWebhook::$ERROR_CODES)) {
-            throw new Exception\SubscribeToWebhook(
+        /**
+         * Se for encontrado algum problema de integração com a PayPay.
+         */
+        if (Exception\IntegrationState::check($this->response->integrationState)) {
+            throw new Exception\IntegrationState($this->response->integrationState);
+        }
+
+        /**
+         * Caso ocorra algum erro específico do método.
+         */
+        if ($this->response->integrationState->state == 0) {
+            throw new Exception\IntegrationResponse(
                 $this->response->integrationState->message,
-                $this->response->integrationState->code. " "
+                $this->response->integrationState->code
             );
         }
 
@@ -149,10 +167,10 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::createPaymentReference($this->entity, $paymentData);
 
         /**
-         * Se integração com o paypay tiver algum problema de configuração no PayPay.
+         * Se for encontrado algum problema de integração com a PayPay.
          */
-        if ($this->response->integrationState->state == 0) {
-            throw new Exception\IntegrationState($this->response);
+        if (Exception\IntegrationState::check($this->response->integrationState)) {
+            throw new Exception\IntegrationState($this->response->integrationState);
         }
 
         /**
@@ -160,19 +178,19 @@ final class PayPayWebservice extends \SoapClient {
          * (ex: montante máximo diário, por referência, etc.)
          */
         if ($this->response->state == 0) {
-            throw new Exception\CreatePaymentReference($this->response);
+            throw new Exception\IntegrationResponse(
+                $this->response->err_msg,
+                $this->response->err_code
+            );
         }
 
         return $this->response;
     }
 
-
     /**
-     * Calls PayPay Webservice to request a credit card payment through.
+     * Calls PayPay Webservice to request a payment via PayPay redirect.
      *
-     * @param  array $orderData          The order details containing the amount, return url, cancel url and
-     *                                   other request parameters.
-     * @param  array $buyerData          The buyer details
+     * @param  RequestCreditCardPayment $requestWebPayment
      * @return ResponseCreditCardPayment The webservice response containing the relevant payment data.
      */
     public function doWebPayment($requestWebPayment)
@@ -180,10 +198,20 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::doWebPayment($this->entity, $requestWebPayment);
 
         /**
+         * Se for encontrado algum problema de integração com a PayPay.
+         */
+        if (Exception\IntegrationState::check($this->response->requestState)) {
+            throw new Exception\IntegrationState($this->response->requestState);
+        }
+
+        /**
          * Se a resposta retornar algum erro previsto.
          */
         if ($this->response->requestState->state == 0) {
-            throw new Exception\DoWebPayment($this->response);
+            throw new Exception\IntegrationResponse(
+                $this->response->requestState->message,
+                $this->response->requestState->code
+            );
         }
 
         return $this->response;
@@ -201,8 +229,18 @@ final class PayPayWebservice extends \SoapClient {
 
         $this->response = parent::checkWebPayment($this->entity, $requestPayment);
 
+        /**
+         * Se for encontrado algum problema de integração com a PayPay.
+         */
+        if (Exception\IntegrationState::check($this->response->requestState)) {
+            throw new Exception\IntegrationState($this->response->requestState);
+        }
+
         if ($this->response->requestState->state == 0) {
-            throw new Exception\CheckWebPayment($this->response);
+            throw new Exception\IntegrationResponse(
+                $this->response->requestState->message,
+                $this->response->requestState->code
+            );
         }
 
         return $this->response;
@@ -220,8 +258,11 @@ final class PayPayWebservice extends \SoapClient {
 
         $this->response = parent::getEntityPayments($this->entity, $requestInterval);
 
-        if ($this->response->integrationState->state == 0) {
-            throw new Exception\IntegrationState($this->response);
+        /**
+         * Se for encontrado algum problema de integração com a PayPay.
+         */
+        if (Exception\IntegrationState::check($this->response->requestState)) {
+            throw new Exception\IntegrationState($this->response->requestState);
         }
 
         return $this->response;
@@ -258,8 +299,15 @@ final class PayPayWebservice extends \SoapClient {
 
         $this->response = parent::checkEntityPayments($this->entity, $requestReferenceDetails);
 
-        if ($this->response->requestState->state == 0) {
-            throw new Exception\CheckEntityPayments($this->response);
+        /**
+         * Se for encontrado algum problema de integração com a PayPay.
+         */
+        if (Exception\IntegrationState::check($this->response->state)) {
+            throw new Exception\IntegrationState($this->response->state);
+        }
+
+        if ($this->response->state->state == 0) {
+            throw new Exception\IntegrationResponse($this->response->state->message, $this->response->state->code);
         }
 
         return $this->response;
