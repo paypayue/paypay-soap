@@ -63,3 +63,29 @@ try {
     $response = $e;
 }
 ```
+
+
+### Payment with redirect
+```php
+try {
+    $order = new \PayPay\Structure\RequestPaymentOrder(
+        array(
+            'amount'      => 1000,
+            'productCode' => '123',
+            'productDesc' => 'DESC'
+        )
+    );
+    $requestPayment = new \PayPay\Structure\RequestCreditCardPayment(
+        $order,
+        'www.paypay.pt',
+        'www.paypay.pt',
+        \PayPay\Structure\RequestCreditCardPayment::METHOD_MB_WAY
+    );
+
+    $response = $client->doWebPayment($requestPayment);
+} catch (Exception $e) {
+    $response = $e;
+}
+
+var_dump($response);
+```
