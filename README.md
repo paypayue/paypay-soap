@@ -105,7 +105,6 @@ var_dump($response);
 ## Processing payments by Webhook
 Use the following method to supply a url that will process all successful payments.
 ```php
-
 $webhook = new \PayPay\Structure\RequestWebhook(
     array(
         'action' => \PayPay\Structure\RequestWebhook::PAYMENT_CONFIRMED,
