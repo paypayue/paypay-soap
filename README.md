@@ -140,3 +140,6 @@ Note:
 * PayPay expects a ```HTTP 200 OK``` header in the response of this request to indicate that the payments we're received successfully. Otherwise, we will retry calling your url 3 times within 30 minute intervals. 
 * PayPay may have to do repeat requests so as failsafe do check that each payment is not already processed on your side.
 * The request has a 30s timeout so it's not recommended that you do any "heavy lifting" (eg. sending emails) during this process. 
+
+## Documentation
+* [Official Documentation](https://paypay.pt/paypay/public/api/PAYPAY_guia_integracao.pdf) (portuguese)
