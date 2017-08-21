@@ -87,6 +87,7 @@ try {
     );
 
     $response = $client->doWebPayment($requestPayment);
+    // save $response->token and $response->idTransaction
     // redirect to $response->url
 } catch (Exception $e) {
     $response = $e;
