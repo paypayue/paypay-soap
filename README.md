@@ -42,13 +42,20 @@ $config = \PayPay\Configuration::setup(
         'langCode'     => 'PT'
     )
 );
+
+$client = \PayPay\PayPayWebservice::init($config);
+try {
+    $response = $client->checkIntegrationState();
+} catch (Exception $e) {
+    // if something is not right an exception will be thrown
+    $response = $e;
+}
+
 ```
 
 ## Creating a payment reference
 Use this method to quickly obtain a payment reference that you can send to your customer. 
 ```php
-$client = \PayPay\PayPayWebservice::init($config);
-
 
 $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     array(
@@ -99,7 +106,7 @@ var_dump($response);
 ## Processing payments by webhook
 Use the following method to supply a url that will process all successful payments.
 ```php
-$client = \PayPay\PayPayWebservice::init($config);
+
 $webhook = new \PayPay\Structure\RequestWebhook(
     array(
         'action' => \PayPay\Structure\RequestWebhook::PAYMENT_CONFIRMED,
