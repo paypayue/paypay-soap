@@ -44,7 +44,7 @@ $config = \PayPay\Configuration::setup(
 );
 ```
 
-### Create a payment reference
+### Creating a payment reference
 Use this method to obtain a payment reference that you can send to your customer. 
 ```php
 $client = \PayPay\PayPayWebservice::init($config);
@@ -93,4 +93,40 @@ try {
 }
 
 var_dump($response);
+```
+
+### Subscribing to a webhook to receive payment confirmations 
+Use the following method to supply a url that will process all successful payments.
+```php
+$client = \PayPay\PayPayWebservice::init($config);
+$webhook = new \PayPay\Structure\RequestWebhook(
+    array(
+        'action' => \PayPay\Structure\RequestWebhook::PAYMENT_CONFIRMED,
+        'url' => 'htt://www.your_process_url.com'
+    )
+);
+try {
+    $response = $client->subscribeToWebhook($webhook);
+} catch (Exception $e) {
+    $response = $e;
+}
+
+var_dump($response);
+```
+
+PayPay will call your url with POST data of the payments that were confirmed. 
+You can use the following code to jump start your payment processing.
+```php
+try {
+    $webhook = \PayPay\WebhookHandler::fromPost($config);
+    $webhook->eachPayment(function($payment) {
+        var_dump($payment); // process 
+    });
+    http_response_code(200); // always return an HTTP status code.
+} catch (\PayPay\Exception\Webhook $e) {
+    http_response_code($e->getCode());
+    echo $e->getMessage();
+}
+
+var_dump($_POST);
 ```
