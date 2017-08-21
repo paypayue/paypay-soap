@@ -28,7 +28,7 @@ If you can't use Composer simply download our PHP library by hitting the link be
 * [Download PHP Library](https://github.com/paypayue/paypay-soap-php/archive/master.zip)
 
 
-### Getting started
+## Getting started
 
 Configure the environment with your platform credentials, or use the following for testing:
 
@@ -44,7 +44,7 @@ $config = \PayPay\Configuration::setup(
 );
 ```
 
-### Creating a payment reference
+## Creating a payment reference
 Use this method to obtain a payment reference that you can send to your customer. 
 ```php
 $client = \PayPay\PayPayWebservice::init($config);
@@ -67,7 +67,7 @@ var_dump($response);
 ```
 
 
-### Payment with redirect
+## Payment with redirect
 This method is recommended for instances where the payment is made straight away, such as during a checkout process.  
 
 ```php
@@ -95,7 +95,7 @@ try {
 var_dump($response);
 ```
 
-### Subscribing to a webhook to receive payment confirmations 
+## Subscribing to a webhook to receive payment confirmations 
 Use the following method to supply a url that will process all successful payments.
 ```php
 $client = \PayPay\PayPayWebservice::init($config);
@@ -114,13 +114,13 @@ try {
 var_dump($response);
 ```
 
-PayPay will call your url with POST data of the payments that were confirmed. 
+PayPay will call your url with POST data of the payments that were confirmed.
 You can use the following code to jump start your payment processing.
 ```php
 try {
     $webhook = \PayPay\WebhookHandler::fromPost($config);
     $webhook->eachPayment(function($payment) {
-        var_dump($payment); // process 
+        var_dump($payment); // save the payments for later processing
     });
     http_response_code(200); // always return an HTTP status code.
 } catch (\PayPay\Exception\Webhook $e) {
@@ -130,3 +130,7 @@ try {
 
 var_dump($_POST);
 ```
+Note:
+* PayPay expects a ```HTTP 200 OK``` header in the response of this request to indicate that the payments we're received successfully. Otherwise, we will retry calling your url 3 times within 30 minute intervals. 
+* PayPay may have to do repeat requests so as failsafe do check that each payment is not already processed on your side.
+* The request has a 30s timeout so it's not recommended that you do any "heavy lifting" (eg. sending emails) during this process. 
