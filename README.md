@@ -11,7 +11,7 @@ In the composer.json file in your project add:
 
 ```javascript
 "require" : {
-    "paypayue/paypay-soap-php" : "dev-master"
+    "paypayue/paypay-soap-php" : "^1.0"
 }
 ```
 In your project folder run the following command:
