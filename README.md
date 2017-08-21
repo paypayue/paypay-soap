@@ -89,7 +89,7 @@ try {
         $order,
         'http://www.your_store_url.com/return',
         'http://www.your_store_url.com/cancel', /// optional 
-        \PayPay\Structure\RequestCreditCardPayment::METHOD_CREDIT_CARD // optional, default is credit card
+        \PayPay\Structure\RequestCreditCardPayment::METHOD_CREDIT_CARD // default is credit card, other methods are available
     );
 
     $response = $client->doWebPayment($requestPayment);
