@@ -3,7 +3,7 @@
     "description": "PHP helper library for PayPay SOAP API integration.",
     "keywords": ["paypay", "payments", "api", "soap","multibanco"],
     "homepage": "https://github.com/paypayue/paypay-soap-php",
-    "type": "project",
+    "type": "library",
     "license": "MIT",
     "authors": [
         {
