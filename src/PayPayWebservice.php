@@ -116,7 +116,7 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::checkIntegrationState($this->entity);
 
         /**
-         * Se for encontrado algum problema de integração com a PayPay.
+         * Checks the state of the platform integration.
          */
         if (Exception\IntegrationState::check($this->response)) {
             throw new Exception\IntegrationState($this->response);
@@ -137,7 +137,7 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::subscribeToWebhook($this->entity, $requestWebhook);
 
         /**
-         * Se for encontrado algum problema de integração com a PayPay.
+         * Checks the state of the platform integration.
          */
         if (Exception\IntegrationState::check($this->response->integrationState)) {
             throw new Exception\IntegrationState($this->response->integrationState);
@@ -167,17 +167,48 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::createPaymentReference($this->entity, $paymentData);
 
         /**
-         * Se for encontrado algum problema de integração com a PayPay.
+         * Checks the state of the platform integration.
          */
         if (Exception\IntegrationState::check($this->response->integrationState)) {
             throw new Exception\IntegrationState($this->response->integrationState);
         }
 
         /**
-         * A integração está a funcionar mas o pagamento pedido ultrapassa algum limite estabelecido.
-         * (ex: montante máximo diário, por referência, etc.)
+         * In case an error code is returned not related to the integration state.
+         * (eg.: maximum daily amount exceeded, maximum reference amount, etc.)
          */
         if ($this->response->state == 0) {
+            throw new Exception\IntegrationResponse(
+                $this->response->err_msg,
+                $this->response->err_code
+            );
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Validates a new payment reference via PayPay.
+     *
+     * @param  array               $paymentData Payment information ex: amount
+     * @return ResponseValidatePayment  $result      Webservice response
+     */
+    public function validatePaymentReference(Structure\RequestReferenceDetails $paymentData)
+    {
+        $this->response = parent::validatePaymentReference($this->entity, $paymentData);
+
+        /**
+         * Checks the state of the platform integration.
+         */
+        if (Exception\IntegrationState::check($this->response->integrationState)) {
+            throw new Exception\IntegrationState($this->response->integrationState);
+        }
+
+        /**
+         * In case an error code is returned not related to the integration state.
+         * (eg.: maximum daily amount exceeded, maximum reference amount, etc.)
+         */
+        if (!empty($this->response->err_code)) {
             throw new Exception\IntegrationResponse(
                 $this->response->err_msg,
                 $this->response->err_code
@@ -198,7 +229,7 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::doWebPayment($this->entity, $requestWebPayment);
 
         /**
-         * Se for encontrado algum problema de integração com a PayPay.
+         * Checks the state of the platform integration.
          */
         if (Exception\IntegrationState::check($this->response->requestState)) {
             throw new Exception\IntegrationState($this->response->requestState);
@@ -230,7 +261,7 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::checkWebPayment($this->entity, $requestPayment);
 
         /**
-         * Se for encontrado algum problema de integração com a PayPay.
+         * Checks the state of the platform integration.
          */
         if (Exception\IntegrationState::check($this->response->requestState)) {
             throw new Exception\IntegrationState($this->response->requestState);
@@ -259,7 +290,7 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::getEntityPayments($this->entity, $requestInterval);
 
         /**
-         * Se for encontrado algum problema de integração com a PayPay.
+         * Checks the state of the platform integration.
          */
         if (Exception\IntegrationState::check($this->response->requestState)) {
             throw new Exception\IntegrationState($this->response->requestState);
@@ -300,7 +331,7 @@ final class PayPayWebservice extends \SoapClient {
         $this->response = parent::checkEntityPayments($this->entity, $requestReferenceDetails);
 
         /**
-         * Se for encontrado algum problema de integração com a PayPay.
+         * Checks the state of the platform integration.
          */
         if (Exception\IntegrationState::check($this->response->state)) {
             throw new Exception\IntegrationState($this->response->state);
