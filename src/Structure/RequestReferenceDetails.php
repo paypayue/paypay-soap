@@ -18,6 +18,16 @@ class RequestReferenceDetails {
     /** @var String */
     public $productDesc;
 
+    /** @var String */
+    public $validStartDate;
+
+    /** @var String */
+    public $validEndDate;
+
+    public $idPlatformCode;
+
+    public $expirationDate;
+
     public function __construct($data)
     {
         $this->amount         = !empty($data['amount']) ? $data['amount']:'';
@@ -25,6 +35,9 @@ class RequestReferenceDetails {
         $this->productDesc    = !empty($data['productDesc']) ? $data['productDesc']:'';
         $this->reference      = !empty($data['reference']) ? $data['reference']:'';
         $this->paymentId      = !empty($data['paymentId']) ? $data['paymentId']:'';
+        $this->idPlatformCode = !empty($data['idPlatformCode']) ? $data['idPlatformCode']:'';
+        $this->validStartDate = !empty($data['validStartDate']) ? $data['validStartDate']:'';
+        $this->validEndDate   = !empty($data['validEndDate']) ? $data['validEndDate']:'';
     }
 
 }
