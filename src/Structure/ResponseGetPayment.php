@@ -9,6 +9,12 @@ class ResponseGetPayment {
     /** @var Int */
     public $state;
 
+    /** @var String */
+    public $err_code;
+
+    /** @var String */
+    public $err_msg;
+
     /** @var Int */
     public $idPayment;
 
@@ -43,8 +49,40 @@ class ResponseGetPayment {
     public $productDesc;
 
     /** @var String */
-    public $err_code;
+    public $validStartDate;
 
     /** @var String */
-    public $err_msg;
+    public $validEndDate;    
+
+    /** @var ResponsePaymentOption[] */
+    public $paymentOptions;
+
+
+    public function __construct($params)
+    {
+        $fields = array(
+            'integrationState',
+            'state',
+            'err_code',
+            'err_msg',                
+            'idPayment',
+            'amount',
+            'creditCardPayment',
+            'atmPayment',
+            'atmEntity',
+            'mbwPayment',
+            'reference',
+            'hash',
+            'linkPayment',
+            'productCode',
+            'productDesc',
+            'validStartDate',
+            'validEndDate',
+            'paymentOptions',
+        );
+        foreach ($fields as $fkey => $fvalue) {
+            $this->$fvalue = empty($params[$fvalue]) ? '': $params[$fvalue];
+        }
+    }
+
 }
