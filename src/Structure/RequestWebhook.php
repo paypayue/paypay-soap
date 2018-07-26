@@ -4,7 +4,8 @@ namespace PayPay\Structure;
 class RequestWebhook
 {
     const PAYMENT_CONFIRMED = 'payment_confirmed';
-
+    const PAYMENT_EXPIRED   = 'payment_expired';
+    
     /** @var string */
     public $action;
 
