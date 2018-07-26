@@ -1,4 +1,5 @@
 <?php
+
 namespace PayPay\Structure;
 
 class ResponsePayment
@@ -30,6 +31,12 @@ class ResponsePayment
     /** @var string */
     public $productDesc;
 
+    /** @var string */
+    public $validStartDate;
+
+    /** @var string */
+    public $validEndDate;
+
     public function __construct(
         $paymentId,
         $referenceEntity,
@@ -38,18 +45,21 @@ class ResponsePayment
         $paymentCancelled,
         $paymentDate,
         $paymentAmount,
-        $productCode,
-        $productDesc
-    )
-    {
-        $this->paymentId         = $paymentId;
-        $this->referenceEntity   = $referenceEntity;
-        $this->reference         = $reference;
+        $productCode = null,
+        $productDesc = null,
+        $validStartDate = null,
+        $validEndDate = null
+    ) {
+        $this->paymentId = $paymentId;
+        $this->referenceEntity = $referenceEntity;
+        $this->reference = $reference;
         $this->paymentMethodCode = $paymentMethodCode;
-        $this->paymentCancelled  = $paymentCancelled;
-        $this->paymentDate       = $paymentDate;
-        $this->paymentAmount     = $paymentAmount;
-        $this->productCode       = $productCode;
-        $this->productDesc       = $productDesc;
+        $this->paymentCancelled = $paymentCancelled;
+        $this->paymentDate = $paymentDate;
+        $this->paymentAmount = $paymentAmount;
+        $this->productCode = $productCode; // opcional
+        $this->productDesc = $productDesc; // opcional
+        $this->validStartDate = $validStartDate; // opcional
+        $this->validEndDate = $validEndDate; // opcional
     }
 }
