@@ -82,15 +82,37 @@ try {
         array(
             'amount'      => 1000,
             'productCode' => 'REF123', // Optional 
-            'productDesc' => 'Product description' // Optional
+            'productDesc' => 'Product description', // Optional
+            'validStartDate' => '2049-06-27T00:00:00-03:00', // Optional
+            'validEndDate' => '2050-06-27T23:59:59-03:00' // Optional            
         )
     );
     $requestPayment = new \PayPay\Structure\RequestCreditCardPayment(
         $order,
-        'http://www.your_store_url.com/return',
-        'http://www.your_store_url.com/cancel', /// optional 
-        \PayPay\Structure\RequestCreditCardPayment::METHOD_CREDIT_CARD // default is credit card, other methods are available
+        'http://www.your_store_url.com/return', // Optional 
+        'http://www.your_store_url.com/cancel' // Optional 
     );
+
+    // Default is credit card, but other methods are available
+    $requestPayment->withMethods(
+        array(
+            \PayPay\Structure\RequestCreditCardPayment::METHOD_CREDIT_CARD,
+            \PayPay\Structure\RequestCreditCardPayment::METHOD_MB_WAY,
+            \PayPay\Structure\RequestCreditCardPayment::METHOD_MULTIBANCO
+        )
+    );
+    
+    // Optional: If you choose to send the customer info we can email them the payment receipt
+    $buyer = new \PayPay\Structure\RequestBuyerInfo(
+        array(
+            'firstName' => 'Manuel',
+            'lastName' => 'Abreu',
+            'email' => 'teste@teste.pt',
+            'customerId' => '123'
+        )
+    );
+
+    $requestPayment->withBuyer($buyer);
 
     $response = $client->doWebPayment($requestPayment);
     // save $response->token and $response->idTransaction
