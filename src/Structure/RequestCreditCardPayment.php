@@ -28,6 +28,15 @@ class RequestCreditCardPayment {
     /** @var RequestBuyerInfo */
     public $buyer;
 
+    /**
+     * Constructor
+     *
+     * @param RequestPaymentOrder $order 
+     * @param string $returnUrlSuccess
+     * @param string $returnUrlCancel
+     * @param string $method
+     * @param RequestBuyerInfo $buyer
+     */
     public function __construct(
         $order,
         $returnUrlSuccess,
@@ -38,8 +47,31 @@ class RequestCreditCardPayment {
         $this->order            = $order;
         $this->returnUrlSuccess = $returnUrlSuccess;
         $this->returnUrlCancel  = $returnUrlCancel;
-        $this->buyer            = $buyer;
         $this->method           = $method;
+        $this->buyer            = $buyer;
     }
 
+    /**
+     * Adds the payments methods to the request 
+     *
+     * @param array $methods
+     * @return void
+     */
+    public function withMethods($methods)
+    {
+        $this->method = implode(',', $methods);
+        return $this;
+    }
+
+    /**
+     * Adds the buyer info to the request
+     *
+     * @param RequestBuyerInfo $buyer
+     * @return void
+     */
+    public function withBuyer(RequestBuyerInfo $buyer)
+    {
+        $this->buyer = $buyer;
+        return $this;
+    }
 }
