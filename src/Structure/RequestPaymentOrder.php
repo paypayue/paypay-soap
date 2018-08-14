@@ -21,6 +21,12 @@ class RequestPaymentOrder
     /** @var string */
     public $productDesc;
 
+    /** @var String */
+    public $validStartDate;
+
+    /** @var String */
+    public $validEndDate;    
+
     public function __construct(
         $order
     )
@@ -31,6 +37,8 @@ class RequestPaymentOrder
         $this->idTransaction = !empty($order['idTransaction']) ? $order['idTransaction'] : '';
         $this->productCode   = !empty($order['productCode']) ? $order['productCode'] : '';
         $this->productDesc   = !empty($order['productDesc']) ? $order['productDesc'] : '';
+        $this->validStartDate = !empty($order['validStartDate']) ? $order['validStartDate'] : '';
+        $this->validEndDate   = !empty($order['validEndDate']) ? $order['validEndDate'] : '';           
     }
 
 }

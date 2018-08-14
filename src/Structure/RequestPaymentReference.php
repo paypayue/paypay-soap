@@ -21,13 +21,21 @@ class RequestPaymentReference
     /** @var string */
     public $productDesc;
 
+    /** @var string */
+    public $validStartDate;
+
+    /** @var string */
+    public $validEndDate;    
+
     public function __construct(
         $referenceEntity,
         $reference,
         $amount,
         $creationDate,
-        $productCode,
-        $productDesc
+        $productCode = null,
+        $productDesc = null,
+        $validStartDate = null,
+        $validEndDate = null
     )
     {
         $this->referenceEntity = $referenceEntity;
@@ -36,5 +44,7 @@ class RequestPaymentReference
         $this->creationDate    = $creationDate;
         $this->productCode     = $productCode; // opcional
         $this->productDesc     = $productDesc; // opcional
+        $this->validStartDate  = $validStartDate; // opcional
+        $this->validEndDate    = $validEndDate; // opcional        
     }
 }
