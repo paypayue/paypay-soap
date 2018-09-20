@@ -54,11 +54,19 @@ final class PayPayWebservice extends \SoapClient {
     {
         $this->config = $config;
 
-
         $options = array (
             'classmap'     => self::$CLASSMAP,
             'location'     => self::endpointUrl('server'),
-            'cache_wsdl'   => WSDL_CACHE_NONE
+            'cache_wsdl'   => WSDL_CACHE_NONE,
+            'stream_context' => stream_context_create(
+                array(
+                    'ssl' => array(
+                        'verify_peer' => true,
+                        'verify_peer_name' => true,
+                        'allow_self_signed' => false
+                    ) 
+                )
+            )
         );
 
         $this->entity = $entity;
