@@ -60,8 +60,23 @@ $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     array(
         'amount'      => 1000,
         'productCode' => 'REF123', // Optional
-        'productDesc' => 'Product description' // Optional
+        'productDesc' => 'Product description', // Optional
+        'validStartDate' => '2049-06-27T00:00:00-03:00', // Optional
+        'validEndDate' => '2050-06-27T23:59:59-03:00' // Optional                
     )
+);
+```
+Specify the payment options your customer may use to pay. Refer to the following files for allowed parameters:
+* [Codes](src/Structure/PaymentMethodCode.php)
+* [Types](src/Structure/PaymentMethodType.php)
+
+```php
+$requestReference->withPaymentOptions(
+    [
+        \PayPay\Structure\RequestPaymentOption::MULTIBANCO(\PayPay\Structure\PaymentMethodType::NORMAL), // Check PaymentMethodType
+        \PayPay\Structure\RequestPaymentOption::MBWAY(),
+        \PayPay\Structure\RequestPaymentOption::CREDIT_CARD()
+    ]
 );
 
 try {
@@ -96,9 +111,9 @@ try {
     // Default is credit card, but other methods are available
     $requestPayment->withMethods(
         array(
-            \PayPay\Structure\RequestCreditCardPayment::METHOD_CREDIT_CARD,
-            \PayPay\Structure\RequestCreditCardPayment::METHOD_MB_WAY,
-            \PayPay\Structure\RequestCreditCardPayment::METHOD_MULTIBANCO
+            \PayPay\Structure\PaymentMethodCode::CREDIT_CARD,
+            \PayPay\Structure\PaymentMethodCode::MULTIBANCO,
+            \PayPay\Structure\PaymentMethodCode::MBWAY
         )
     );
     
