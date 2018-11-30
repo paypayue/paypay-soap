@@ -66,9 +66,7 @@ $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     )
 );
 ```
-Specify the payment options your customer may use to pay. Refer to the following files for allowed parameters:
-* [Codes](src/Structure/PaymentMethodCode.php)
-* [Types](src/Structure/PaymentMethodType.php)
+Specify the payment options your customer may use to pay. 
 
 ```php
 $requestReference->withPaymentOptions(
@@ -86,7 +84,9 @@ try {
 }
 var_dump($response);
 ```
-
+Refer to the following files for allowed parameters:
+* [Codes](src/Structure/PaymentMethodCode.php)
+* [Types](src/Structure/PaymentMethodType.php)
 
 ## Payment with redirect
 This method is recommended for instances where the payment is made straight away, such as during a checkout process.  
