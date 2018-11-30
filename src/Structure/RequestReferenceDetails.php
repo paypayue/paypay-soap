@@ -28,6 +28,9 @@ class RequestReferenceDetails {
 
     public $expirationDate;
 
+    /** @var RequestPaymentOption[] */
+    public $paymentOptions;
+
     public function __construct($data)
     {
         $this->amount         = !empty($data['amount']) ? $data['amount']:'';
@@ -38,6 +41,18 @@ class RequestReferenceDetails {
         $this->idPlatformCode = !empty($data['idPlatformCode']) ? $data['idPlatformCode']:'';
         $this->validStartDate = !empty($data['validStartDate']) ? $data['validStartDate']:'';
         $this->validEndDate   = !empty($data['validEndDate']) ? $data['validEndDate']:'';
+        $this->paymentOptions = !empty($data['paymentOptions']) ? $data['paymentOptions']:null;
     }
 
+    /**
+     * Set the payment options for the payment reference.
+     *
+     * @param RequestPaymentOption[] $paymentOptions
+     * @return RequestReferenceDetails
+     */
+    public function withPaymentOptions($paymentOptions)
+    {
+        $this->paymentOptions = $paymentOptions;
+        return $this;
+    }
 }
