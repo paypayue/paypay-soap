@@ -47,7 +47,9 @@ final class PayPayWebservice extends \SoapClient {
             'RequestCreditCardPayment'        => '\PayPay\Structure\RequestCreditCardPayment',
             'ResponseCreditCardPayment'       => '\PayPay\Structure\ResponseCreditCardPayment',
             'RequestReferenceDetails'         => '\PayPay\Structure\RequestReferenceDetails',
-            'ResponseGetPayment'              => '\PayPay\Structure\ResponseGetPayment'
+            'ResponseGetPayment'              => '\PayPay\Structure\ResponseGetPayment',
+            'ResponsePaymentOption'           => '\PayPay\Structure\ResponsePaymentOption',
+            'RequestPaymentOption'            => '\PayPay\Structure\RequestPaymentOption'
     );
 
     public function __construct(Configuration $config, Structure\RequestEntity $entity)
