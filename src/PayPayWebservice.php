@@ -66,7 +66,9 @@ final class PayPayWebservice extends \SoapClient {
             'stream_context' => stream_context_create(
                 array(
                     'ssl' => array(
+                        'cafile' => __DIR__ .'/../cert/cacert.pem',
                         'verify_peer' => true,
+                        'verify_depth'  => 5,
                         'verify_peer_name' => true,
                         'allow_self_signed' => false
                     )
