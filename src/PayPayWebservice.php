@@ -9,6 +9,8 @@ namespace PayPay;
  */
 final class PayPayWebservice extends \SoapClient {
 
+    const REVISION = "1.4.1";
+
     private $response;
 
     /**
@@ -59,22 +61,25 @@ final class PayPayWebservice extends \SoapClient {
         $options = array (
             'classmap'     => self::$CLASSMAP,
             'location'     => self::endpointUrl('server'),
-            'cache_wsdl'   => WSDL_CACHE_NONE,
+            'cache_wsdl'   => WSDL_CACHE_BOTH,
+            'user_agent' => 'PayPay-SOAP/' . self::REVISION,
             'stream_context' => stream_context_create(
                 array(
                     'ssl' => array(
                         'verify_peer' => true,
                         'verify_peer_name' => true,
                         'allow_self_signed' => false
-                    ) 
+                    )
                 )
             )
         );
 
         $this->entity = $entity;
 
-        // libxml_disable_entity_loader(false);
-        parent::__construct(self::endpointUrl('wsdl'), $options);
+        $wsdl = self::endpointUrl('wsdl');
+        $wsdl .= '?rev=' . self::REVISION;
+
+        parent::__construct($wsdl, $options);
     }
 
     private function endpointUrl($type = '')
