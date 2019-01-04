@@ -62,7 +62,7 @@ final class PayPayWebservice extends \SoapClient {
             'classmap'     => self::$CLASSMAP,
             'location'     => self::endpointUrl('server'),
             'cache_wsdl'   => WSDL_CACHE_BOTH,
-            'user_agent' => 'PayPay-SOAP/' . self::REVISION,
+            'user_agent' => $this->getUserAgent(),
             'stream_context' => stream_context_create(
                 array(
                     'ssl' => array(
@@ -78,13 +78,28 @@ final class PayPayWebservice extends \SoapClient {
 
         $this->entity = $entity;
 
-        $wsdl = self::endpointUrl('wsdl');
-        $wsdl .= '?rev=' . self::REVISION;
+        $wsdl = self::endpointUrl('wsdl') . $this->getRevisionHash();
 
         parent::__construct($wsdl, $options);
     }
 
-    private function endpointUrl($type = '')
+    private function getUserAgent()
+    {
+        return 'PayPay-SOAP/' . $this->getRevision();
+    }
+
+
+    private function getRevision()
+    {
+        return self::REVISION . '-' . $this->config->getEnvironment();
+    }
+
+    private function getRevisionHash()
+    {
+        return '?rev=' . sha1($this->getRevision());
+    }
+
+    private function endpointUrl($type = '', $query_string = '')
     {
         $env = $this->config->getEnvironment();
         if (!isset(self::$ENDPOINTS[$env])) {
