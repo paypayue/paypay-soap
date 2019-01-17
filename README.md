@@ -66,7 +66,7 @@ $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     )
 );
 ```
-Specify the payment options your customer may use to pay. 
+(Optional) Specify the payment options your customer may use to pay. Otherwise we will use the options configured on your PayPay account.
 
 ```php
 $requestReference->withPaymentOptions(
@@ -108,7 +108,7 @@ try {
         'http://www.your_store_url.com/cancel' // Optional 
     );
 
-    // Default is credit card, but other methods are available
+    // Optional: Specify the payment options, default is credit card.
     $requestPayment->withMethods(
         array(
             \PayPay\Structure\PaymentMethodCode::CREDIT_CARD,
