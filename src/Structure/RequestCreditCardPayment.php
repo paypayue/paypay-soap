@@ -63,15 +63,15 @@ class RequestCreditCardPayment {
     public function withRedirectUrls($redirects)
     {
         if (isset($redirects['success'])) {
-            $this->returnUrlSuccess = $returnUrlSuccess;
+            $this->returnUrlSuccess = $redirects['success'];
         }
 
         if (isset($redirects['cancel'])) {
-            $this->returnUrlCancel = $returnUrlCancel;
+            $this->returnUrlCancel = $redirects['cancel'];
         }
 
         if (isset($redirects['back'])) {
-            $this->returnUrlBack = $returnUrlBack;
+            $this->returnUrlBack = $redirects['back'];
         }
 
         return $this;
