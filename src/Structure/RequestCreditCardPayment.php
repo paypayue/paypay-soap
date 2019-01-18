@@ -16,6 +16,9 @@ class RequestCreditCardPayment {
     /** @var String */
     public $returnUrlCancel;
 
+    /** @var String */
+    public $returnUrlBack;
+
     /**
      * Forma de pagamento:
      * CC - Cartão de crédito;
@@ -31,7 +34,7 @@ class RequestCreditCardPayment {
     /**
      * Constructor
      *
-     * @param RequestPaymentOrder $order 
+     * @param RequestPaymentOrder $order
      * @param string $returnUrlSuccess
      * @param string $returnUrlCancel
      * @param string $method
@@ -52,10 +55,33 @@ class RequestCreditCardPayment {
     }
 
     /**
-     * Adds the payments methods to the request 
+     * Sets the redirect urls on the request
+     *
+     * @param array $redirects
+     * @return RequestCreditCardPayment
+     */
+    public function withRedirectUrls($redirects)
+    {
+        if (isset($redirects['success'])) {
+            $this->returnUrlSuccess = $redirects['success'];
+        }
+
+        if (isset($redirects['cancel'])) {
+            $this->returnUrlCancel = $redirects['cancel'];
+        }
+
+        if (isset($redirects['back'])) {
+            $this->returnUrlBack = $redirects['back'];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Adds the payments methods to the request
      *
      * @param array $methods
-     * @return void
+     * @return RequestCreditCardPayment
      */
     public function withMethods($methods)
     {
@@ -67,7 +93,7 @@ class RequestCreditCardPayment {
      * Adds the buyer info to the request
      *
      * @param RequestBuyerInfo $buyer
-     * @return void
+     * @return RequestCreditCardPayment
      */
     public function withBuyer(RequestBuyerInfo $buyer)
     {

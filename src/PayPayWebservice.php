@@ -9,6 +9,8 @@ namespace PayPay;
  */
 final class PayPayWebservice extends \SoapClient {
 
+    const REVISION = "1.4.1";
+
     private $response;
 
     /**
@@ -59,25 +61,45 @@ final class PayPayWebservice extends \SoapClient {
         $options = array (
             'classmap'     => self::$CLASSMAP,
             'location'     => self::endpointUrl('server'),
-            'cache_wsdl'   => WSDL_CACHE_NONE,
+            'cache_wsdl'   => WSDL_CACHE_BOTH,
+            'user_agent' => $this->getUserAgent(),
             'stream_context' => stream_context_create(
                 array(
                     'ssl' => array(
+                        'cafile' => __DIR__ .'/../cert/cacert.pem',
                         'verify_peer' => true,
+                        'verify_depth'  => 5,
                         'verify_peer_name' => true,
                         'allow_self_signed' => false
-                    ) 
+                    )
                 )
             )
         );
 
         $this->entity = $entity;
 
-        // libxml_disable_entity_loader(false);
-        parent::__construct(self::endpointUrl('wsdl'), $options);
+        $wsdl = self::endpointUrl('wsdl') . $this->getRevisionHash();
+
+        parent::__construct($wsdl, $options);
     }
 
-    private function endpointUrl($type = '')
+    private function getUserAgent()
+    {
+        return 'PayPay-SOAP/' . $this->getRevision();
+    }
+
+
+    private function getRevision()
+    {
+        return self::REVISION . '-' . $this->config->getEnvironment();
+    }
+
+    private function getRevisionHash()
+    {
+        return '?rev=' . sha1($this->getRevision());
+    }
+
+    private function endpointUrl($type = '', $query_string = '')
     {
         $env = $this->config->getEnvironment();
         if (!isset(self::$ENDPOINTS[$env])) {
