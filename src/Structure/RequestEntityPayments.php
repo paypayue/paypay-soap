@@ -11,4 +11,8 @@ class RequestEntityPayments
         $this->payments = array();
     }
 
+    public function addPayment(RequestReferenceDetails $payment)
+    {
+        $this->payments[] = $payment;
+    }
 }
