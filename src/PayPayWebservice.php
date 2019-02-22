@@ -9,7 +9,7 @@ namespace PayPay;
  */
 final class PayPayWebservice extends \SoapClient {
 
-    const REVISION = "1.4.1";
+    const REVISION = "1.6.0";
 
     private $response;
 
@@ -44,6 +44,7 @@ final class PayPayWebservice extends \SoapClient {
             'RequestInterval'                 => '\PayPay\Structure\RequestInterval',
             'RequestPaymentReference'         => '\PayPay\Structure\RequestPaymentReference',
             'ResponseEntityPayments'          => '\PayPay\Structure\ResponseEntityPayments',
+            'ResponsePayment'                 => '\PayPay\Structure\ResponsePayment',
             'ResponseEntityPaymentReferences' => '\PayPay\Structure\ResponseEntityPaymentReferences',
             'ResponseEntityPaymentsDetails'   => '\PayPay\Structure\ResponseEntityPaymentsDetails',
             'RequestCreditCardPayment'        => '\PayPay\Structure\RequestCreditCardPayment',
@@ -51,7 +52,10 @@ final class PayPayWebservice extends \SoapClient {
             'RequestReferenceDetails'         => '\PayPay\Structure\RequestReferenceDetails',
             'ResponseGetPayment'              => '\PayPay\Structure\ResponseGetPayment',
             'ResponsePaymentOption'           => '\PayPay\Structure\ResponsePaymentOption',
-            'RequestPaymentOption'            => '\PayPay\Structure\RequestPaymentOption'
+            'RequestPaymentOption'            => '\PayPay\Structure\RequestPaymentOption',
+            'PaymentDetails'                  => '\PayPay\Structure\PaymentDetails',
+            'PaymentFee'                      => '\PayPay\Structure\PaymentFee',
+            'TransferDetails'                 => '\PayPay\Structure\TransferDetails'
     );
 
     public function __construct(Configuration $config, Structure\RequestEntity $entity)
@@ -324,8 +328,8 @@ final class PayPayWebservice extends \SoapClient {
         /**
          * Checks the state of the platform integration.
          */
-        if (Exception\IntegrationState::check($this->response->requestState)) {
-            throw new Exception\IntegrationState($this->response->requestState);
+        if (Exception\IntegrationState::check($this->response->integrationState)) {
+            throw new Exception\IntegrationState($this->response->integrationState);
         }
 
         return $this->response;
@@ -343,19 +347,14 @@ final class PayPayWebservice extends \SoapClient {
     /**
      * Calls the PayPay Webservice to check the state of multiple payments.
      * @param   array                         $payments [description]
-     * @return  ResponseEntityPaymentsDetails             [description]
+     * @return  ResponseEntityPaymentsDetails             Webservice Response
      */
     public function checkEntityPayments($payments = array())
     {
         $requestReferenceDetails = new Structure\RequestEntityPayments();
         if ($payments) {
             foreach ($payments as $key => $value) {
-                $requestPayment = new Structure\RequestReferenceDetails(
-                    array(
-                        'reference' => $value['reference'],
-                        'paymentId' => $value['paymentId']
-                    )
-                );
+                $requestPayment = new Structure\RequestReferenceDetails($value);
                 $requestReferenceDetails->addPayment($requestPayment);
             }
         }
