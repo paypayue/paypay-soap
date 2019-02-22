@@ -52,37 +52,8 @@ class ResponseGetPayment {
     public $validStartDate;
 
     /** @var String */
-    public $validEndDate;    
+    public $validEndDate;
 
     /** @var ResponsePaymentOption[] */
     public $paymentOptions;
-
-
-    public function __construct($params)
-    {
-        $fields = array(
-            'integrationState',
-            'state',
-            'err_code',
-            'err_msg',                
-            'idPayment',
-            'amount',
-            'creditCardPayment',
-            'atmPayment',
-            'atmEntity',
-            'mbwPayment',
-            'reference',
-            'hash',
-            'linkPayment',
-            'productCode',
-            'productDesc',
-            'validStartDate',
-            'validEndDate',
-            'paymentOptions',
-        );
-        foreach ($fields as $fkey => $fvalue) {
-            $this->$fvalue = empty($params[$fvalue]) ? '': $params[$fvalue];
-        }
-    }
-
 }

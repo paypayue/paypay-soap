@@ -14,12 +14,4 @@ class ResponseCreditCardPayment
 
     /** @var Int */
     public $idTransaction;
-
-    public function __construct($params)
-    {
-        $this->requestState     = $params['requestState'];
-        $this->url              = empty($params['url']) ? '' : $params['url'];
-        $this->token            = empty($params['token']) ? '' : $params['token'];
-        $this->idTransaction    = empty($params['idTransaction']) ? '' : $params['idTransaction'];
-    }
 }
