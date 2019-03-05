@@ -24,10 +24,6 @@ class RequestReferenceDetails {
     /** @var String */
     public $validEndDate;
 
-    public $idPlatformCode;
-
-    public $expirationDate;
-
     /** @var RequestPaymentOption[] */
     public $paymentOptions;
 
@@ -38,9 +34,8 @@ class RequestReferenceDetails {
         $this->productDesc    = !empty($data['productDesc']) ? $data['productDesc']:'';
         $this->reference      = !empty($data['reference']) ? $data['reference']:'';
         $this->paymentId      = !empty($data['paymentId']) ? $data['paymentId']:'';
-        $this->idPlatformCode = !empty($data['idPlatformCode']) ? $data['idPlatformCode']:'';
-        $this->validStartDate = !empty($data['validStartDate']) ? $data['validStartDate']:'';
-        $this->validEndDate   = !empty($data['validEndDate']) ? $data['validEndDate']:'';
+        $this->validStartDate = !empty($data['validStartDate']) ? $data['validStartDate']:null;
+        $this->validEndDate   = !empty($data['validEndDate']) ? $data['validEndDate']:null;
         $this->paymentOptions = !empty($data['paymentOptions']) ? $data['paymentOptions']:null;
     }
 

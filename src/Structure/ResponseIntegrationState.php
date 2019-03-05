@@ -9,12 +9,4 @@ class ResponseIntegrationState
     public $code;
     /** @var string */
     public $message;
-
-    public function __construct($params)
-    {
-        $this->code    = $params['code'];
-        $this->message = $params['message'];
-        $this->state   = $params['state'];
-    }
-
 }
