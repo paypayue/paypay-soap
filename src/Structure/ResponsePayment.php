@@ -42,4 +42,7 @@ class ResponsePayment
 
     /** @var TransferDetails */
     public $transferDetails;
+
+    /** @var PaymentRefund[] */
+    public $paymentRefunds;
 }
