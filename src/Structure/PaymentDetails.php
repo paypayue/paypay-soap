@@ -44,4 +44,7 @@ class PaymentDetails {
 
     /** @var TransferDetails */
     public $transferDetails;
+
+    /** @var PaymentRefund[] */
+    public $paymentRefunds;
 }

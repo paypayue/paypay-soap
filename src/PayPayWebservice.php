@@ -55,7 +55,8 @@ final class PayPayWebservice extends \SoapClient {
             'RequestPaymentOption'            => '\PayPay\Structure\RequestPaymentOption',
             'PaymentDetails'                  => '\PayPay\Structure\PaymentDetails',
             'PaymentFee'                      => '\PayPay\Structure\PaymentFee',
-            'TransferDetails'                 => '\PayPay\Structure\TransferDetails'
+            'TransferDetails'                 => '\PayPay\Structure\TransferDetails',
+            'PaymentRefund'                   => '\PayPay\Structure\PaymentRefund',
     );
 
     public function __construct(Configuration $config, Structure\RequestEntity $entity)
