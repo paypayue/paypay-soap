@@ -177,4 +177,4 @@ try {
 * The request has a 30s timeout so it's not recommended that you do any "heavy lifting" (eg. sending emails, slow queries, etc.) during this process. 
 
 ## Documentation
-* [Official Documentation](https://paypay.pt/paypay/public/api/PAYPAY_guia_integracao.pdf) (portuguese)
+* [Official Documentation](https://paypay.pt/paypay/public/api/) (portuguese)
