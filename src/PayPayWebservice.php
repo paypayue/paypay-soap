@@ -9,7 +9,7 @@ namespace PayPay;
  */
 final class PayPayWebservice extends \SoapClient {
 
-    const REVISION = "1.7.0";
+    const REVISION = "1.8.0";
 
     private $response;
 
@@ -25,6 +25,14 @@ final class PayPayWebservice extends \SoapClient {
     private static $ENDPOINTS = array(
         'production' => 'https://www.paypay.pt/paypay/paypayservices/paypayservices_c',
         'testing'    => 'https://paypay.acin.pt/paypaybeta/paypayservices/paypayservices_c'
+    );
+
+    /**
+     * @var array
+     */
+    private static $CACERT_ENDPOINT = array(
+        'production' => 'https://www.paypay.pt/paypay/public/api/cacert.pem',
+        'testing'    => 'https://paypay.acin.pt/paypaybeta/public/api/cacert.pem'
     );
 
     /**
@@ -63,7 +71,9 @@ final class PayPayWebservice extends \SoapClient {
     {
         $this->config = $config;
 
-        $options = array (
+        $this->getCacertfile();
+
+        $options = array(
             'classmap'     => self::$CLASSMAP,
             'location'     => self::endpointUrl('server'),
             'cache_wsdl'   => WSDL_CACHE_BOTH,
@@ -71,7 +81,7 @@ final class PayPayWebservice extends \SoapClient {
             'stream_context' => stream_context_create(
                 array(
                     'ssl' => array(
-                        'cafile' => __DIR__ .'/../cert/cacert.pem',
+                        'cafile' => sys_get_temp_dir() . '/paypaycacert.pem',
                         'verify_peer' => true,
                         'verify_depth'  => 5,
                         'verify_peer_name' => true,
@@ -86,6 +96,17 @@ final class PayPayWebservice extends \SoapClient {
         $wsdl = self::endpointUrl('wsdl') . $this->getRevisionHash();
 
         parent::__construct($wsdl, $options);
+    }
+
+    private function getCacertfile()
+    {
+        $env = $this->config->getEnvironment();
+        $ch = curl_init(self::$CACERT_ENDPOINT[$env]);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        file_put_contents(sys_get_temp_dir() . '/paypaycacert.pem', curl_exec($ch));
     }
 
     private function getUserAgent()
