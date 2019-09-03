@@ -27,6 +27,9 @@ class RequestReferenceDetails {
     /** @var RequestPaymentOption[] */
     public $paymentOptions;
 
+    /** @var String */
+    public $bankAccountCode;
+
     public function __construct($data)
     {
         $this->amount         = !empty($data['amount']) ? $data['amount']:'';
@@ -37,6 +40,7 @@ class RequestReferenceDetails {
         $this->validStartDate = !empty($data['validStartDate']) ? $data['validStartDate']:null;
         $this->validEndDate   = !empty($data['validEndDate']) ? $data['validEndDate']:null;
         $this->paymentOptions = !empty($data['paymentOptions']) ? $data['paymentOptions']:null;
+        $this->bankAccountCode  = !empty($data['bankAccountCode']) ? $data['bankAccountCode'] : null;
     }
 
     /**

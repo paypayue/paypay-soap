@@ -31,6 +31,9 @@ class RequestCreditCardPayment {
     /** @var RequestBuyerInfo */
     public $buyer;
 
+    /** @var String */
+    public $bankAccountCode;
+
     /**
      * Constructor
      *
@@ -39,19 +42,22 @@ class RequestCreditCardPayment {
      * @param string $returnUrlCancel
      * @param string $method
      * @param RequestBuyerInfo $buyer
+     * @param string $bankAccountCode
      */
     public function __construct(
         $order,
         $returnUrlSuccess,
         $returnUrlCancel  = "",
         $method           = 'CC',
-        $buyer            = null
+        $buyer            = null,
+        $bankAccountCode = null
     ) {
         $this->order            = $order;
         $this->returnUrlSuccess = $returnUrlSuccess;
         $this->returnUrlCancel  = $returnUrlCancel;
         $this->method           = $method;
         $this->buyer            = $buyer;
+        $this->bankAccountCode  = $bankAccountCode;
     }
 
     /**
