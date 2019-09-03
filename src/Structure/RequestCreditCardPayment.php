@@ -31,6 +31,9 @@ class RequestCreditCardPayment {
     /** @var RequestBuyerInfo */
     public $buyer;
 
+    /** @var String */
+    public $bankAccountCode;
+
     /**
      * Constructor
      *
@@ -39,6 +42,7 @@ class RequestCreditCardPayment {
      * @param string $returnUrlCancel
      * @param string $method
      * @param RequestBuyerInfo $buyer
+     * @param string $bankAccountCode
      */
     public function __construct(
         $order,
@@ -98,6 +102,18 @@ class RequestCreditCardPayment {
     public function withBuyer(RequestBuyerInfo $buyer)
     {
         $this->buyer = $buyer;
+        return $this;
+    }
+
+    /**
+     * Sets the bank account code for the web payment.
+     *
+     * @param string $bankAccountCode
+     * @return RequestCreditCardPayment
+     */
+    public function withBankAccount($bankAccountCode)
+    {
+        $this->bankAccountCode = $bankAccountCode;
         return $this;
     }
 }
