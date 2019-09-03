@@ -49,15 +49,13 @@ class RequestCreditCardPayment {
         $returnUrlSuccess,
         $returnUrlCancel  = "",
         $method           = 'CC',
-        $buyer            = null,
-        $bankAccountCode = null
+        $buyer            = null
     ) {
         $this->order            = $order;
         $this->returnUrlSuccess = $returnUrlSuccess;
         $this->returnUrlCancel  = $returnUrlCancel;
         $this->method           = $method;
         $this->buyer            = $buyer;
-        $this->bankAccountCode  = $bankAccountCode;
     }
 
     /**
@@ -104,6 +102,18 @@ class RequestCreditCardPayment {
     public function withBuyer(RequestBuyerInfo $buyer)
     {
         $this->buyer = $buyer;
+        return $this;
+    }
+
+    /**
+     * Sets the bank account code for the web payment.
+     *
+     * @param string $bankAccountCode
+     * @return RequestCreditCardPayment
+     */
+    public function withBankAccount($bankAccountCode)
+    {
+        $this->bankAccountCode = $bankAccountCode;
         return $this;
     }
 }

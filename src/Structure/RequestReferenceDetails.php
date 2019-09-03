@@ -40,7 +40,6 @@ class RequestReferenceDetails {
         $this->validStartDate = !empty($data['validStartDate']) ? $data['validStartDate']:null;
         $this->validEndDate   = !empty($data['validEndDate']) ? $data['validEndDate']:null;
         $this->paymentOptions = !empty($data['paymentOptions']) ? $data['paymentOptions']:null;
-        $this->bankAccountCode  = !empty($data['bankAccountCode']) ? $data['bankAccountCode'] : null;
     }
 
     /**
@@ -52,6 +51,18 @@ class RequestReferenceDetails {
     public function withPaymentOptions($paymentOptions)
     {
         $this->paymentOptions = $paymentOptions;
+        return $this;
+    }
+
+    /**
+     * Sets the bank account code for the payment reference.
+     *
+     * @param string $bankAccountCode
+     * @return RequestReferenceDetails
+     */
+    public function withBankAccount($bankAccountCode)
+    {
+        $this->bankAccountCode = $bankAccountCode;
         return $this;
     }
 }
