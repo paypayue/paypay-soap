@@ -63,15 +63,21 @@ final class PayPayWebservice extends \SoapClient {
     {
         $this->config = $config;
 
+        $endpoint = self::endpointUrl('server');
+        $host = parse_url($endpoint, PHP_URL_HOST);
+
         $options = array (
             'classmap'     => self::$CLASSMAP,
-            'location'     => self::endpointUrl('server'),
+            'location'     => $endpoint,
             'cache_wsdl'   => WSDL_CACHE_BOTH,
             'user_agent' => $this->getUserAgent(),
             'stream_context' => stream_context_create(
                 array(
                     'ssl' => array(
                         'cafile' => __DIR__ .'/../cert/cacert.pem',
+                        'CN_match' => $host,
+                        'ciphers' => 'HIGH:!SSLv2:!SSLv3',
+                        'disable_compression' => true,
                         'verify_peer' => true,
                         'verify_depth'  => 5,
                         'verify_peer_name' => true,
