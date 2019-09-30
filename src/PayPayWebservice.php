@@ -69,7 +69,7 @@ final class PayPayWebservice extends \SoapClient {
         $options = array (
             'classmap'     => self::$CLASSMAP,
             'location'     => $endpoint,
-            'cache_wsdl'   => WSDL_CACHE_DISK,
+            'cache_wsdl'   => $config->getCacheWsdl(),
             'user_agent' => $this->getUserAgent(),
             'stream_context' => stream_context_create(
                 array(

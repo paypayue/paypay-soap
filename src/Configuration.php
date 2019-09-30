@@ -8,11 +8,12 @@ namespace PayPay;
  */
 class Configuration
 {
-    private $environment  = null;
-    private $privateKey   = null;
-    private $clientId     = null;
-    private $platformCode = null;
-    private $langCode     = "PT";
+    private $environment;
+    private $privateKey;
+    private $clientId;
+    private $platformCode;
+    private $langCode;
+    private $cacheWsdl;
 
     /**
      *
@@ -27,6 +28,9 @@ class Configuration
 
     public function __construct($attribs = array())
     {
+        $this->langCode  = "PT";
+        $this->cacheWsdl = WSDL_CACHE_BOTH;
+
         foreach ($attribs as $kind => $value) {
             if (property_exists($this, $kind)) {
                 $this->$kind = $value;
@@ -105,5 +109,13 @@ class Configuration
     public function logMessage($message)
     {
         error_log('[PayPay] ' . $message);
+    }
+
+    /**
+     * Get the value of cacheWsdl
+     */
+    public function getCacheWsdl()
+    {
+        return $this->cacheWsdl;
     }
 }
