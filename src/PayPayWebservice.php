@@ -9,7 +9,7 @@ namespace PayPay;
  */
 final class PayPayWebservice extends \SoapClient {
 
-    const REVISION = "1.8.1";
+    const REVISION = "1.9.0";
 
     private $response;
 
