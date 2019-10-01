@@ -66,6 +66,12 @@ $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     )
 );
 ```
+
+(Optional) Specify the destination bank account for the payment
+
+```php    
+$requestReference->withBankAccount('RDoHIUaw');
+```
 (Optional) Specify the payment options your customer may use to pay. Otherwise we will use the options configured on your PayPay account.
 
 ```php
@@ -107,8 +113,17 @@ try {
         'http://www.your_store_url.com/return', // Optional 
         'http://www.your_store_url.com/cancel' // Optional 
     );
+```
 
-    // Optional: Specify the payment options, default is credit card.
+(Optional) Specify the destination bank account for the payment
+
+```php    
+    $requestPayment->withBankAccount('RDoHIUaw');
+```
+
+(Optional) Specify the payment options, default is credit card.
+
+```php    
     $requestPayment->withMethods(
         array(
             \PayPay\Structure\PaymentMethodCode::CREDIT_CARD,
@@ -116,8 +131,11 @@ try {
             \PayPay\Structure\PaymentMethodCode::MBWAY
         )
     );
-    
-    // Optional: If you choose to send the customer info we can email them the payment receipt
+```
+
+(Optional) If you choose to send the customer info we can email them the payment receipt
+
+```php    
     $buyer = new \PayPay\Structure\RequestBuyerInfo(
         array(
             'firstName' => 'Manuel',
