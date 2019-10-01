@@ -31,9 +31,17 @@ class Configuration
         $this->langCode  = "PT";
         $this->cacheWsdl = WSDL_CACHE_BOTH;
 
-        foreach ($attribs as $kind => $value) {
-            if (property_exists($this, $kind)) {
-                $this->$kind = $value;
+        $fields = [
+            'environment',
+            'privateKey',
+            'clientId',
+            'platformCode',
+            'langCode'
+        ];
+
+        foreach ($fields as $fvalue) {
+            if (isset($attribs[$fvalue]) && $attribs[$fvalue] != '')  {
+                $this->$fvalue = $attribs[$fvalue];
             }
         }
 
@@ -101,7 +109,7 @@ class Configuration
     }
 
     /**
-     * log message to default logger
+     * Log message to default logger
      *
      * @param string $message
      *
@@ -117,5 +125,21 @@ class Configuration
     public function getCacheWsdl()
     {
         return $this->cacheWsdl;
+    }
+
+    /**
+     * Sets the mode of wsdl cache. Must be one of the following:
+     * WSDL_CACHE_BOTH,
+     * WSDL_CACHE_DISK,
+     * WSDL_CACHE_MEMORY,
+     * WSDL_CACHE_NONE
+     *
+     */
+    public function setCacheWsdl($cacheWsdl)
+    {
+        if (!in_array($cacheWsdl, [WSDL_CACHE_BOTH, WSDL_CACHE_DISK, WSDL_CACHE_MEMORY, WSDL_CACHE_NONE])) {
+            throw new InvalidArgumentException("Invalid WSDL cache method.");
+        }
+        $this->cacheWsdl = $cacheWsdl;
     }
 }
