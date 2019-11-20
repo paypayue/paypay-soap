@@ -16,4 +16,11 @@ final class PaymentFee {
      * @var Float
      */
     public $taxAmount;
+
+    /**
+     * The fee invoice information
+     *
+     * @var InvoiceDetails
+     */
+    public $invoiceDetails;
 }
