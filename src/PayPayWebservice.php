@@ -115,7 +115,7 @@ final class PayPayWebservice extends \SoapClient {
         $env = $this->config->getEnvironment();
         if (!isset(self::$ENDPOINTS[$env])) {
             if (!defined('PAYPAY_WEBSERVICE_URL')) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     "There is no endpoint for the current environment, use the constant PAYPAY_WEBSERVICE_URL"
                 );
             }
