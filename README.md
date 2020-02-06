@@ -1,4 +1,4 @@
-# PayPay PHP SOAP Library 
+# PayPay PHP SOAP Library
 
 Official library for PayPay SOAP API integrations written in PHP.
 
@@ -6,7 +6,7 @@ Official library for PayPay SOAP API integrations written in PHP.
 * The library requires PHP version 5.4.0 or higher and the [SOAP extension](http://php.net/manual/en/book.soap.php).
 
 ### Installation
-We recommend that you use [Composer](https://getcomposer.org/) a package manager for PHP. 
+We recommend that you use [Composer](https://getcomposer.org/) a package manager for PHP.
 In the composer.json file in your project add:
 
 ```javascript
@@ -54,7 +54,7 @@ try {
 ```
 
 ## Creating a payment reference
-Use this method to quickly obtain a payment reference that you can send to your customer. 
+Use this method to quickly obtain a payment reference that you can send to your customer.
 ```php
 $requestReference = new \PayPay\Structure\RequestReferenceDetails(
     array(
@@ -62,14 +62,14 @@ $requestReference = new \PayPay\Structure\RequestReferenceDetails(
         'productCode' => 'REF123', // Optional
         'productDesc' => 'Product description', // Optional
         'validStartDate' => '2049-06-27T00:00:00-03:00', // Optional
-        'validEndDate' => '2050-06-27T23:59:59-03:00' // Optional                
+        'validEndDate' => '2050-06-27T23:59:59-03:00' // Optional
     )
 );
 ```
 
 (Optional) Specify the destination bank account for the payment
 
-```php    
+```php
 $requestReference->withBankAccount('RDoHIUaw');
 ```
 (Optional) Specify the payment options your customer may use to pay. Otherwise we will use the options configured on your PayPay account.
@@ -94,36 +94,64 @@ Refer to the following files for allowed parameters:
 * [Codes](src/Structure/PaymentMethodCode.php)
 * [Types](src/Structure/PaymentMethodType.php)
 
+
+## Cancel payment
+Use this method to quickly cancel a payment that is no longer valid according to your business context. All payment methods will be cancelled currently only the following methods support cancellation:
+* Multibanco Real-time;
+* Credit/debit card;
+* MB WAY.
+
+```php
+try {
+    $requestPayment = new \PayPay\Structure\RequestCancelPayment(
+        123456, // Payment or transaction id
+        'b180712cf8f6131b0d2950a83912ef7610ce0cde', // OR the payment hash
+        'remarks' // some remarks or comments
+    );
+    $response = $client->cancelPayment($requestPayment);
+} catch (Exception $e) {
+    $response = $e;
+}
+var_dump($response);
+
+```
+
+(Optional) Some methods cannot be cancelled (Eg.: Multibanco Normal) but you may bypass this and still mark the payment as cancelled.
+
+```php
+$requestPayment->ignoreUnsupported();
+```
+
 ## Payment with redirect
-This method is recommended for instances where the payment is made straight away, such as during a checkout process.  
+This method is recommended for instances where the payment is made straight away, such as during a checkout process.
 
 ```php
 try {
     $order = new \PayPay\Structure\RequestPaymentOrder(
         array(
             'amount'      => 1000,
-            'productCode' => 'REF123', // Optional 
+            'productCode' => 'REF123', // Optional
             'productDesc' => 'Product description', // Optional
             'validStartDate' => '2049-06-27T00:00:00-03:00', // Optional
-            'validEndDate' => '2050-06-27T23:59:59-03:00' // Optional            
+            'validEndDate' => '2050-06-27T23:59:59-03:00' // Optional
         )
     );
     $requestPayment = new \PayPay\Structure\RequestCreditCardPayment(
         $order,
-        'http://www.your_store_url.com/return', // Optional 
-        'http://www.your_store_url.com/cancel' // Optional 
+        'http://www.your_store_url.com/return', // Optional
+        'http://www.your_store_url.com/cancel' // Optional
     );
 ```
 
 (Optional) Specify the destination bank account for the payment
 
-```php    
+```php
     $requestPayment->withBankAccount('RDoHIUaw');
 ```
 
 (Optional) Specify the payment options, default is credit card.
 
-```php    
+```php
     $requestPayment->withMethods(
         array(
             \PayPay\Structure\PaymentMethodCode::CREDIT_CARD,
@@ -135,7 +163,7 @@ try {
 
 (Optional) If you choose to send the customer info we can email them the payment receipt
 
-```php    
+```php
     $buyer = new \PayPay\Structure\RequestBuyerInfo(
         array(
             'firstName' => 'Manuel',
@@ -190,9 +218,9 @@ try {
 }
 ```
 ### Additional Notes
-* PayPay expects a ```HTTP 200 OK``` header in response to the webhook request. This signals that the payments we're received successfully. Otherwise, we will retry calling your url 3 times within 30 minute intervals. 
+* PayPay expects a ```HTTP 200 OK``` header in response to the webhook request. This signals that the payments we're received successfully. Otherwise, we will retry calling your url 3 times within 30 minute intervals.
 * Since PayPay may have to do repeat requests, as a failsafe you should check that each payment is not already processed on your side.
-* The request has a 30s timeout so it's not recommended that you do any "heavy lifting" (eg. sending emails, slow queries, etc.) during this process. 
+* The request has a 30s timeout so it's not recommended that you do any "heavy lifting" (eg. sending emails, slow queries, etc.) during this process.
 
 ## Documentation
 * [Official Documentation](https://paypay.pt/paypay/public/api/) (portuguese)
