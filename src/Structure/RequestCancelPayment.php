@@ -22,4 +22,16 @@ class RequestCancelPayment {
         $this->remarks = $remarks;
         $this->ignoreUnsupported = $ignoreUnsupported;
     }
+
+    /**
+     * Set the value of ignoreUnsupported
+     *
+     * @return  self
+     */
+    public function ignoreUnsupported()
+    {
+        $this->ignoreUnsupported = true;
+
+        return $this;
+    }
 }
