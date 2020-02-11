@@ -1,6 +1,7 @@
 <?php
 namespace PayPay;
 
+use PayPay\Structure\RequestCancelPayment;
 
 /**
  *
@@ -9,7 +10,7 @@ namespace PayPay;
  */
 final class PayPayWebservice extends \SoapClient {
 
-    const REVISION = "1.9.1";
+    const REVISION = "1.9.3";
 
     private $response;
 
@@ -57,6 +58,9 @@ final class PayPayWebservice extends \SoapClient {
             'PaymentFee'                      => '\PayPay\Structure\PaymentFee',
             'TransferDetails'                 => '\PayPay\Structure\TransferDetails',
             'PaymentRefund'                   => '\PayPay\Structure\PaymentRefund',
+            'RequestCancelPayment'            => '\PayPay\Structure\RequestCancelPayment',
+            'ResponseCancelPayment'           => '\PayPay\Structure\ResponseCancelPayment',
+            'ResponseCancelPaymentOption'     => '\PayPay\Structure\ResponseCancelPaymentOption',
     );
 
     public function __construct(Configuration $config, Structure\RequestEntity $entity)
@@ -115,7 +119,7 @@ final class PayPayWebservice extends \SoapClient {
         $env = $this->config->getEnvironment();
         if (!isset(self::$ENDPOINTS[$env])) {
             if (!defined('PAYPAY_WEBSERVICE_URL')) {
-                throw new InvalidArgumentException(
+                throw new \InvalidArgumentException(
                     "There is no endpoint for the current environment, use the constant PAYPAY_WEBSERVICE_URL"
                 );
             }
@@ -377,6 +381,30 @@ final class PayPayWebservice extends \SoapClient {
 
         if ($this->response->state->state == 0) {
             throw new Exception\IntegrationResponse($this->response->state->message, $this->response->state->code);
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Cancels the specified payment/transaction and associated payment methods.
+     *
+     * @param RequestCancelPayment $requestCancelPayment
+     * @return ResponseCancelPayment
+     */
+    public function cancelPayment(RequestCancelPayment $requestCancelPayment)
+    {
+        $this->response = parent::cancelPayment($this->entity, $requestCancelPayment);
+
+        /**
+         * Checks the state of the platform integration.
+         */
+        if (Exception\IntegrationState::check($this->response->requestState)) {
+            throw new Exception\IntegrationState($this->response->requestState);
+        }
+
+        if ($this->response->requestState->state == 0) {
+            throw new Exception\IntegrationResponse($this->response->requestState->message, $this->response->requestState->code);
         }
 
         return $this->response;
