@@ -409,4 +409,34 @@ final class PayPayWebservice extends \SoapClient {
 
         return $this->response;
     }
+
+    /**
+     * Calls the PayPay Webservice to save payments generated locally with a configured reference range
+     * @param  array  $payments 
+     * @return ResponseEntityPaymentReferences      Webservice Response
+     */
+    public function saveEntityPayments($payments = [])
+    {
+        $this->response = parent::saveEntityPayments($this->entity, $payments);
+
+        /**
+         * Checks the payments is valid.
+         */
+        if (!empty($this->response->paymentReferenceErrors)) {
+            throw new Exception\IntegrationMultiResponseError($this->response->integrationState, $this->response->paymentReferenceErrors);
+        }
+
+        /**
+         * Checks the state of the platform integration.
+         */
+        if (Exception\IntegrationState::check($this->response->integrationState)) {
+            throw new Exception\IntegrationState($this->response->integrationState);
+        }
+
+        if ($this->response->integrationState->state == 0) {
+            throw new Exception\IntegrationResponse($this->response->integrationState->message, $this->response->integrationState->code);
+        }
+
+        return $this->response;
+    }
 }
