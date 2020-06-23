@@ -213,6 +213,18 @@ try {
 var_dump($response);
 ```
 
+schedule for retry and/or discard submitted references
+```php
+if (isset($response['responseErrors'])) {
+    foreach ($response['responseErrors'] as $responseErrors) {
+        echo 'Reference ->' . $responseErrors->reference . '<br/>';
+        echo 'errorCode ->' . $responseErrors->errorCode . '<br/>';
+        echo 'errorMessage ->' . $responseErrors->errorMessage . '<br/>';
+        echo '========== <br/><br/>';
+    }
+}
+```
+
 ## Process incoming payments by Webhook
 Use the following method to supply a url that will process all successful payments.
 ```php
