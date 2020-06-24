@@ -61,6 +61,7 @@ final class PayPayWebservice extends \SoapClient {
             'RequestCancelPayment'            => '\PayPay\Structure\RequestCancelPayment',
             'ResponseCancelPayment'           => '\PayPay\Structure\ResponseCancelPayment',
             'ResponseCancelPaymentOption'     => '\PayPay\Structure\ResponseCancelPaymentOption',
+            'ResponsePaymentReferenceError'   => '\PayPay\Structure\ResponsePaymentReferenceError'
     );
 
     public function __construct(Configuration $config, Structure\RequestEntity $entity)
@@ -70,10 +71,10 @@ final class PayPayWebservice extends \SoapClient {
         $endpoint = self::endpointUrl('server');
         $host = parse_url($endpoint, PHP_URL_HOST);
 
-        $options = array (
-            'classmap'     => self::$CLASSMAP,
-            'location'     => $endpoint,
-            'cache_wsdl'   => $config->getCacheWsdl(),
+        $options = array(
+            'classmap' => self::$CLASSMAP,
+            'location' => $endpoint,
+            'cache_wsdl' => $config->getCacheWsdl(),
             'user_agent' => $this->getUserAgent(),
             'stream_context' => stream_context_create(
                 array(
@@ -412,7 +413,7 @@ final class PayPayWebservice extends \SoapClient {
 
     /**
      * Calls the PayPay Webservice to save payments generated locally with a configured reference range
-     * @param  array  $payments 
+     * @param  array  $payments
      * @return ResponseEntityPaymentReferences      Webservice Response
      */
     public function saveEntityPayments($payments = [])
