@@ -8,9 +8,9 @@ use PayPay\Structure\RequestCancelPayment;
  * PayPay Webservice Soap Client implementation
  *
  */
-final class PayPayWebservice extends \SoapClient {
-
-    const REVISION = "1.9.3";
+final class PayPayWebservice extends \SoapClient
+{
+    const REVISION = "1.10.0";
 
     private $response;
 
