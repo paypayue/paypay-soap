@@ -8,9 +8,9 @@ use PayPay\Structure\RequestCancelPayment;
  * PayPay Webservice Soap Client implementation
  *
  */
-final class PayPayWebservice extends \SoapClient {
-
-    const REVISION = "1.9.3";
+final class PayPayWebservice extends \SoapClient
+{
+    const REVISION = "1.10.0";
 
     private $response;
 
@@ -61,6 +61,7 @@ final class PayPayWebservice extends \SoapClient {
             'RequestCancelPayment'            => '\PayPay\Structure\RequestCancelPayment',
             'ResponseCancelPayment'           => '\PayPay\Structure\ResponseCancelPayment',
             'ResponseCancelPaymentOption'     => '\PayPay\Structure\ResponseCancelPaymentOption',
+            'ResponsePaymentReferenceError'   => '\PayPay\Structure\ResponsePaymentReferenceError'
     );
 
     public function __construct(Configuration $config, Structure\RequestEntity $entity)
@@ -70,10 +71,10 @@ final class PayPayWebservice extends \SoapClient {
         $endpoint = self::endpointUrl('server');
         $host = parse_url($endpoint, PHP_URL_HOST);
 
-        $options = array (
-            'classmap'     => self::$CLASSMAP,
-            'location'     => $endpoint,
-            'cache_wsdl'   => $config->getCacheWsdl(),
+        $options = array(
+            'classmap' => self::$CLASSMAP,
+            'location' => $endpoint,
+            'cache_wsdl' => $config->getCacheWsdl(),
             'user_agent' => $this->getUserAgent(),
             'stream_context' => stream_context_create(
                 array(
@@ -405,6 +406,36 @@ final class PayPayWebservice extends \SoapClient {
 
         if ($this->response->requestState->state == 0) {
             throw new Exception\IntegrationResponse($this->response->requestState->message, $this->response->requestState->code);
+        }
+
+        return $this->response;
+    }
+
+    /**
+     * Calls the PayPay Webservice to save payments generated locally with a configured reference range
+     * @param  array  $payments
+     * @return ResponseEntityPaymentReferences      Webservice Response
+     */
+    public function saveEntityPayments($payments = [])
+    {
+        $this->response = parent::saveEntityPayments($this->entity, $payments);
+
+        /**
+         * Checks the payments is valid.
+         */
+        if (!empty($this->response->paymentReferenceErrors)) {
+            throw new Exception\IntegrationMultiResponseError($this->response->integrationState, $this->response->paymentReferenceErrors);
+        }
+
+        /**
+         * Checks the state of the platform integration.
+         */
+        if (Exception\IntegrationState::check($this->response->integrationState)) {
+            throw new Exception\IntegrationState($this->response->integrationState);
+        }
+
+        if ($this->response->integrationState->state == 0) {
+            throw new Exception\IntegrationResponse($this->response->integrationState->message, $this->response->integrationState->code);
         }
 
         return $this->response;
