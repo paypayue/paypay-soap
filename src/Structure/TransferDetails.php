@@ -16,4 +16,11 @@ final class TransferDetails {
      * @var String
      */
     public $transferDate;
+
+    /**
+     * The bank transfer account IBAN.
+     *
+     * @var String
+     */
+    public $bankAccountIban;
 }

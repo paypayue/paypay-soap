@@ -46,7 +46,7 @@ $config = \PayPay\Configuration::setup(
 $client = \PayPay\PayPayWebservice::init($config);
 try {
     $response = $client->checkIntegrationState();
-} catch (Exception $e) {
+} catch (\Exception $e) {
     // if something is not right an exception will be thrown
     $response = $e;
 }
@@ -85,7 +85,7 @@ $requestReference->withPaymentOptions(
 
 try {
     $response = $client->createPaymentReference($requestReference);
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $response = $e;
 }
 var_dump($response);
@@ -109,7 +109,7 @@ try {
         'remarks' // some remarks or comments
     );
     $response = $client->cancelPayment($requestPayment);
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $response = $e;
 }
 var_dump($response);
@@ -178,11 +178,51 @@ try {
     $response = $client->doWebPayment($requestPayment);
     // save $response->token and $response->idTransaction
     // redirect to $response->url
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $response = $e;
 }
 
 var_dump($response);
+```
+
+## Send references generated locally
+Use the following method to send references generated locally with a configured reference range. 
+The reference range must be previously configured in PayPay only references that are within the configured range will be accepted.
+```php
+$payments = array();
+
+$payments[] = new \PayPay\Structure\RequestPaymentReference(
+    '12797',
+    '812331888',
+    1000,
+    "2020-06-22T08:30:49-03:00", //Optinal you can use in this format "d-m-Y H:i:s"
+    "2020-06-22T08:30:49-03:00",
+    "2020-07-22T08:30:49-03:00"
+);
+
+try {
+    $response = $client->saveEntityPayments($payments);
+} catch (\PayPay\Exception\IntegrationMultiResponseError $e) {
+    // if something is not right an exception will be thrown
+    $response = $e->getMultiResponseError(); //Optional you can use getIntegrationState() or getResponseErrors() to get individual response
+} catch (\Exception $e) {
+    // if something is not right an exception will be thrown
+    $response = $e;
+}
+
+var_dump($response);
+```
+
+schedule for retry and/or discard submitted references
+```php
+if (isset($response['responseErrors'])) {
+    foreach ($response['responseErrors'] as $responseErrors) {
+        echo 'Reference ->' . $responseErrors->reference . '<br/>';
+        echo 'errorCode ->' . $responseErrors->errorCode . '<br/>';
+        echo 'errorMessage ->' . $responseErrors->errorMessage . '<br/>';
+        echo '========== <br/><br/>';
+    }
+}
 ```
 
 ## Process incoming payments by Webhook
@@ -196,7 +236,7 @@ $webhook = new \PayPay\Structure\RequestWebhook(
 );
 try {
     $response = $client->subscribeToWebhook($webhook);
-} catch (Exception $e) {
+} catch (\Exception $e) {
     $response = $e;
 }
 
