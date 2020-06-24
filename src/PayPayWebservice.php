@@ -2,6 +2,7 @@
 namespace PayPay;
 
 use PayPay\Structure\RequestCancelPayment;
+use PayPay\Structure\RequestReferenceDetails;
 
 /**
  *
@@ -366,7 +367,7 @@ final class PayPayWebservice extends \SoapClient
         $requestReferenceDetails = new Structure\RequestEntityPayments();
         if ($payments) {
             foreach ($payments as $key => $value) {
-                $requestPayment = new Structure\RequestReferenceDetails($value);
+                $requestPayment = is_a($value, RequestReferenceDetails::class) ? $value : new RequestReferenceDetails($value);
                 $requestReferenceDetails->addPayment($requestPayment);
             }
         }
