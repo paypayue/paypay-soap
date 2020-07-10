@@ -62,7 +62,9 @@ final class PayPayWebservice extends \SoapClient
             'RequestCancelPayment'            => '\PayPay\Structure\RequestCancelPayment',
             'ResponseCancelPayment'           => '\PayPay\Structure\ResponseCancelPayment',
             'ResponseCancelPaymentOption'     => '\PayPay\Structure\ResponseCancelPaymentOption',
-            'ResponsePaymentReferenceError'   => '\PayPay\Structure\ResponsePaymentReferenceError'
+            'ResponsePaymentReferenceError'   => '\PayPay\Structure\ResponsePaymentReferenceError',
+            'RequestBillingAddress'           => '\PayPay\Structure\RequestBillingAddress',
+            'RequestShippingAddress'          => '\PayPay\Structure\RequestShippingAddress',
     );
 
     public function __construct(Configuration $config, Structure\RequestEntity $entity)

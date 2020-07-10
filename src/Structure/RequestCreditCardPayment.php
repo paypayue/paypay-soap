@@ -34,6 +34,12 @@ class RequestCreditCardPayment {
     /** @var String */
     public $bankAccountCode;
 
+    /** @var RequestBillingAddress */
+    public $billingAddress;
+
+    /** @var RequestShippingAddress */
+    public $shippingAddress;
+
     /**
      * Constructor
      *
@@ -43,19 +49,25 @@ class RequestCreditCardPayment {
      * @param string $method
      * @param RequestBuyerInfo $buyer
      * @param string $bankAccountCode
+     * @param RequestBillingAddress $billingAddress
+     * @param RequestShippingAddress $shippingAddress
      */
     public function __construct(
         $order,
         $returnUrlSuccess,
         $returnUrlCancel  = "",
         $method           = 'CC',
-        $buyer            = null
+        $buyer            = null,
+        $billingAddress   = null,
+        $shippingAddress  = null
     ) {
         $this->order            = $order;
         $this->returnUrlSuccess = $returnUrlSuccess;
         $this->returnUrlCancel  = $returnUrlCancel;
         $this->method           = $method;
         $this->buyer            = $buyer;
+        $this->billingAddress   = $billingAddress;
+        $this->shippingAddress  = $shippingAddress;
     }
 
     /**
@@ -114,6 +126,30 @@ class RequestCreditCardPayment {
     public function withBankAccount($bankAccountCode)
     {
         $this->bankAccountCode = $bankAccountCode;
+        return $this;
+    }
+
+    /**
+     * Adds the billing address to the request
+     *
+     * @param RequestBillingAddress $billingAddress
+     * @return RequestCreditCardPayment
+     */
+    public function withBillingAddress(RequestBillingAddress $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+        return $this;
+    }
+
+    /**
+     * Adds the shipping address to the request
+     *
+     * @param RequestShippingAddress $shippingAddress
+     * @return RequestCreditCardPayment
+     */
+    public function withShippingAddress(RequestShippingAddress $shippingAddress)
+    {
+        $this->shippingAddress = $shippingAddress;
         return $this;
     }
 }
