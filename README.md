@@ -182,6 +182,7 @@ try {
     $billingAddress = new \PayPay\Structure\RequestBillingAddress(
         array(
             'country' => 'PT',
+            'state' => 'RAM',
             'city' => 'Ribeira Brava',
             'street1' => 'ACIN iCloud Solutions',
             'street2' => 'Estrada Regional, 104 Nº 42-A'
@@ -198,6 +199,7 @@ try {
     $shippingAddress = new \PayPay\Structure\RequestShippingAddress(
         array(
             'country' => 'PT',
+            'state' => 'RAM',
             'city' => 'Ribeira Brava',
             'street1' => 'ACIN iCloud Solutions',
             'street2' => 'Estrada Regional, 104 Nº 42-A'

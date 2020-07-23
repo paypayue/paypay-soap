@@ -11,6 +11,9 @@ class RequestShippingAddress
 {
     /** @var String ISO 3166-1*/
     public $country;
+
+    /** @var String */
+    public $state;
  
     /** @var String */
     public $city;
@@ -27,6 +30,7 @@ class RequestShippingAddress
     public function __construct($shippingAddress)
     {
         $this->country  = $shippingAddress['country' ];
+        $this->state    = $shippingAddress['state'   ];
         $this->city     = $shippingAddress['city'    ];
         $this->street1  = $shippingAddress['street1' ];
         $this->street2  = $shippingAddress['street2' ];
