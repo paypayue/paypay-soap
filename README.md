@@ -181,8 +181,9 @@ try {
 ```php
     $billingAddress = new \PayPay\Structure\RequestBillingAddress(
         array(
-            'country' => 'PT',
-            'state' => 'RAM',
+            'country' => 'PT', // Country code according ISO 3166-1
+            'state' => '30', // State/District code according ISO 3166 Alpha-2 Code
+            'stateName' => 'Região Autónoma da Madeira',
             'city' => 'Ribeira Brava',
             'street1' => 'ACIN iCloud Solutions',
             'street2' => 'Estrada Regional, 104 Nº 42-A'
@@ -198,8 +199,9 @@ try {
 ```php
     $shippingAddress = new \PayPay\Structure\RequestShippingAddress(
         array(
-            'country' => 'PT',
-            'state' => 'RAM',
+            'country' => 'PT', // Country code according ISO 3166-1
+            'state' => '30', // State/District code according ISO 3166 Alpha-2 Code
+            'stateName' => 'Região Autónoma da Madeira',
             'city' => 'Ribeira Brava',
             'street1' => 'ACIN iCloud Solutions',
             'street2' => 'Estrada Regional, 104 Nº 42-A'

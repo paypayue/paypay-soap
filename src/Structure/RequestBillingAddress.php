@@ -16,6 +16,9 @@ class RequestBillingAddress
 	public $state;
 
 	/** @var String */
+	public $stateName;
+
+	/** @var String */
 	public $city;
 
 	/** @var String */
@@ -29,11 +32,12 @@ class RequestBillingAddress
 
 	public function __construct($billingAddress)
 	{
-		$this->country  = $billingAddress['country' ];
-		$this->state    = $billingAddress['state'   ];
-		$this->city     = $billingAddress['city'    ];
-		$this->street1  = $billingAddress['street1' ];
-		$this->street2  = $billingAddress['street2' ];
-		$this->postCode = $billingAddress['postCode'];
+		$this->country   = $billingAddress['country'  ];
+		$this->state     = $billingAddress['state'    ];
+		$this->stateName = $billingAddress['stateName'];
+		$this->city      = $billingAddress['city'     ];
+		$this->street1   = $billingAddress['street1'  ];
+		$this->street2   = $billingAddress['street2'  ];
+		$this->postCode  = $billingAddress['postCode' ];
 	}
 }
