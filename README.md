@@ -174,6 +174,42 @@ try {
     );
 
     $requestPayment->withBuyer($buyer);
+```
+
+(Optional) If you choose to send the billing address add them the payment receipt
+
+```php
+    $billingAddress = new \PayPay\Structure\RequestBillingAddress(
+        array(
+            'country' => 'PT', // Country code according ISO 3166-1
+            'state' => '30', // State/District code according ISO 3166 Alpha-2 Code
+            'stateName' => 'Região Autónoma da Madeira',
+            'city' => 'Ribeira Brava',
+            'street1' => 'ACIN iCloud Solutions',
+            'street2' => 'Estrada Regional, 104 Nº 42-A'
+            'postCode' => '9350-203'
+        )
+    );
+
+    $requestPayment->withBillingAddress($billingAddress);
+```
+
+(Optional) If you choose to send the shipping address add them the payment receipt
+
+```php
+    $shippingAddress = new \PayPay\Structure\RequestShippingAddress(
+        array(
+            'country' => 'PT', // Country code according ISO 3166-1
+            'state' => '30', // State/District code according ISO 3166 Alpha-2 Code
+            'stateName' => 'Região Autónoma da Madeira',
+            'city' => 'Ribeira Brava',
+            'street1' => 'ACIN iCloud Solutions',
+            'street2' => 'Estrada Regional, 104 Nº 42-A'
+            'postCode' => '9350-203'
+        )
+    );
+
+    $requestPayment->withShippingAddress($shippingAddress);
 
     $response = $client->doWebPayment($requestPayment);
     // save $response->token and $response->idTransaction
