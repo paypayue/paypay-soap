@@ -11,7 +11,7 @@ use PayPay\Structure\RequestReferenceDetails;
  */
 final class PayPayWebservice extends \SoapClient
 {
-    const REVISION = "1.10.0";
+    const REVISION = "1.11.0";
 
     private $response;
 
