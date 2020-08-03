@@ -11,7 +11,7 @@ use PayPay\Structure\RequestReferenceDetails;
  */
 final class PayPayWebservice extends \SoapClient
 {
-    const REVISION = "1.11.0";
+    const REVISION = "1.12.0";
 
     private $response;
 
@@ -152,7 +152,8 @@ final class PayPayWebservice extends \SoapClient
             $config->generateAccessToken($date),
             $dataAtual,
             $configParams['clientId'],
-            $configParams['langCode']
+            $configParams['langCode'],
+            $configParams['platformInfo']
         );
 
         return new self($config, $entity);

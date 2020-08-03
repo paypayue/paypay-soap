@@ -13,13 +13,16 @@ class RequestEntity
     public $nif;
     /** @var string */
     public $lang;
+    /** @var array */
+    public $info;
 
-    public function __construct($platformCode, $hash, $date, $nif, $lang)
+    public function __construct($platformCode, $hash, $date, $nif, $lang = null, $info = [])
     {
         $this->platformCode = $platformCode;
         $this->hash         = $hash;
         $this->date         = $date;
         $this->nif          = $nif;
         $this->lang         = $lang;
+        $this->info         = $info;
     }
 }

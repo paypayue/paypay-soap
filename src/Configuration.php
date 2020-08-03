@@ -12,6 +12,7 @@ class Configuration
     private $privateKey;
     private $clientId;
     private $platformCode;
+    private $platformInfo;
     private $langCode;
     private $cacheWsdl;
 
@@ -36,7 +37,8 @@ class Configuration
             'privateKey',
             'clientId',
             'platformCode',
-            'langCode'
+            'langCode',
+            'platformInfo'
         ];
 
         foreach ($fields as $fvalue) {
@@ -105,6 +107,7 @@ class Configuration
             'clientId'     => $this->clientId,
             'platformCode' => $this->platformCode,
             'langCode'     => $this->langCode,
+            'platformInfo' => $this->platformInfo
         );
     }
 
@@ -138,7 +141,7 @@ class Configuration
     public function setCacheWsdl($cacheWsdl)
     {
         if (!in_array($cacheWsdl, [WSDL_CACHE_BOTH, WSDL_CACHE_DISK, WSDL_CACHE_MEMORY, WSDL_CACHE_NONE])) {
-            throw new InvalidArgumentException("Invalid WSDL cache method.");
+            throw new \InvalidArgumentException("Invalid WSDL cache method.");
         }
         $this->cacheWsdl = $cacheWsdl;
     }
