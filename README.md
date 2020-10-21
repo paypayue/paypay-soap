@@ -56,7 +56,7 @@ try {
 ## Creating a payment reference
 Use this method to quickly obtain a payment reference that you can send to your customer.
 ```php
-$requestReference = new \PayPay\Structure\RequestReferenceDetails(
+$requestPayment = new \PayPay\Structure\RequestReferenceDetails(
     array(
         'amount'      => 1000,
         'productCode' => 'REF123', // Optional
@@ -70,12 +70,12 @@ $requestReference = new \PayPay\Structure\RequestReferenceDetails(
 (Optional) Specify the destination bank account for the payment
 
 ```php
-$requestReference->withBankAccount('RDoHIUaw');
+$requestPayment->withBankAccount('RDoHIUaw');
 ```
 (Optional) Specify the payment options your customer may use to pay. Otherwise we will use the options configured on your PayPay account.
 
 ```php
-$requestReference->withPaymentOptions(
+$requestPayment->withPaymentOptions(
     [
         \PayPay\Structure\RequestPaymentOption::MULTIBANCO(\PayPay\Structure\PaymentMethodType::NORMAL), // Check PaymentMethodType
         \PayPay\Structure\RequestPaymentOption::MBWAY(),
@@ -84,7 +84,7 @@ $requestReference->withPaymentOptions(
 );
 
 try {
-    $response = $client->createPaymentReference($requestReference);
+    $response = $client->createPaymentReference($requestPayment);
 } catch (\Exception $e) {
     $response = $e;
 }
@@ -94,33 +94,6 @@ Refer to the following files for allowed parameters:
 * [Codes](src/Structure/PaymentMethodCode.php)
 * [Types](src/Structure/PaymentMethodType.php)
 
-
-## Cancel payment
-Use this method to quickly cancel a payment that is no longer valid according to your business context. All payment methods will be cancelled currently only the following methods support cancellation:
-* Multibanco Real-time;
-* Credit/debit card;
-* MB WAY.
-
-```php
-try {
-    $requestPayment = new \PayPay\Structure\RequestCancelPayment(
-        123456, // Payment or transaction id
-        'b180712cf8f6131b0d2950a83912ef7610ce0cde', // OR the payment hash
-        'remarks' // some remarks or comments
-    );
-    $response = $client->cancelPayment($requestPayment);
-} catch (\Exception $e) {
-    $response = $e;
-}
-var_dump($response);
-
-```
-
-(Optional) Some methods cannot be cancelled (Eg.: Multibanco Normal) but you may bypass this and still mark the payment as cancelled.
-
-```php
-$requestPayment->ignoreUnsupported();
-```
 
 ## Payment with redirect
 This method is recommended for instances where the payment is made straight away, such as during a checkout process.
@@ -159,8 +132,20 @@ try {
             \PayPay\Structure\PaymentMethodCode::MBWAY
         )
     );
+
+    $requestPayment->withShippingAddress($shippingAddress);
+
+    $response = $client->doWebPayment($requestPayment);
+    // save $response->token and $response->idTransaction
+    // redirect to $response->url
+} catch (\Exception $e) {
+    $response = $e;
+}
+
+var_dump($response);
 ```
 
+## Additional information
 (Optional) If you choose to send the customer info we can email them the payment receipt
 
 ```php
@@ -210,19 +195,39 @@ try {
     );
 
     $requestPayment->withShippingAddress($shippingAddress);
+```
 
-    $response = $client->doWebPayment($requestPayment);
-    // save $response->token and $response->idTransaction
-    // redirect to $response->url
+
+## Cancel payment
+Use this method to quickly cancel a payment that is no longer valid according to your business context. All payment methods will be cancelled currently only the following methods support cancellation:
+* Multibanco Real-time;
+* Credit/debit card;
+* MB WAY.
+
+```php
+try {
+    $requestPayment = new \PayPay\Structure\RequestCancelPayment(
+        123456, // Payment or transaction id
+        'b180712cf8f6131b0d2950a83912ef7610ce0cde', // OR the payment hash
+        'remarks' // some remarks or comments
+    );
+    $response = $client->cancelPayment($requestPayment);
 } catch (\Exception $e) {
     $response = $e;
 }
-
 var_dump($response);
 ```
 
+
+(Optional) Some methods cannot be cancelled (Eg.: Multibanco Normal) but you may bypass this and still mark the payment as cancelled.
+
+```php
+$requestPayment->ignoreUnsupported();
+```
+
+
 ## Send references generated locally
-Use the following method to send references generated locally with a configured reference range. 
+Use the following method to send references generated locally with a configured reference range.
 The reference range must be previously configured in PayPay only references that are within the configured range will be accepted.
 ```php
 $payments = array();
