@@ -11,7 +11,7 @@ use PayPay\Structure\RequestReferenceDetails;
  */
 final class PayPayWebservice extends \SoapClient
 {
-    const REVISION = "1.11.0";
+    const REVISION = "1.13.0";
 
     private $response;
 
@@ -63,6 +63,7 @@ final class PayPayWebservice extends \SoapClient
             'ResponseCancelPayment'           => '\PayPay\Structure\ResponseCancelPayment',
             'ResponseCancelPaymentOption'     => '\PayPay\Structure\ResponseCancelPaymentOption',
             'ResponsePaymentReferenceError'   => '\PayPay\Structure\ResponsePaymentReferenceError',
+            'RequestBuyerInfo'                => '\PayPay\Structure\RequestBuyerInfo',
             'RequestBillingAddress'           => '\PayPay\Structure\RequestBillingAddress',
             'RequestShippingAddress'          => '\PayPay\Structure\RequestShippingAddress',
     );
@@ -152,7 +153,8 @@ final class PayPayWebservice extends \SoapClient
             $config->generateAccessToken($date),
             $dataAtual,
             $configParams['clientId'],
-            $configParams['langCode']
+            $configParams['langCode'],
+            $configParams['platformInfo']
         );
 
         return new self($config, $entity);
