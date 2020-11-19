@@ -362,37 +362,6 @@ final class PayPayWebservice extends \SoapClient
     }
 
     /**
-     * Calls the PayPay Webservice to check the state of multiple payments.
-     * @param   array                         $payments [description]
-     * @return  ResponseEntityPaymentsDetails             Webservice Response
-     */
-    public function checkEntityPayments($payments = array())
-    {
-        $requestReferenceDetails = new Structure\RequestEntityPayments();
-        if ($payments) {
-            foreach ($payments as $key => $value) {
-                $requestPayment = is_a($value, RequestReferenceDetails::class) ? $value : new RequestReferenceDetails($value);
-                $requestReferenceDetails->addPayment($requestPayment);
-            }
-        }
-
-        $this->response = parent::checkEntityPayments($this->entity, $requestReferenceDetails);
-
-        /**
-         * Checks the state of the platform integration.
-         */
-        if (Exception\IntegrationState::check($this->response->state)) {
-            throw new Exception\IntegrationState($this->response->state);
-        }
-
-        if ($this->response->state->state == 0) {
-            throw new Exception\IntegrationResponse($this->response->state->message, $this->response->state->code);
-        }
-
-        return $this->response;
-    }
-
-    /**
      * Cancels the specified payment/transaction and associated payment methods.
      *
      * @param RequestCancelPayment $requestCancelPayment
@@ -421,7 +390,7 @@ final class PayPayWebservice extends \SoapClient
      * @param  array  $payments
      * @return ResponseEntityPaymentReferences      Webservice Response
      */
-    public function saveEntityPayments($payments = [])
+    public function saveEntityPayments($payments = array())
     {
         $this->response = parent::saveEntityPayments($this->entity, $payments);
 
