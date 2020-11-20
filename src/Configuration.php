@@ -32,14 +32,14 @@ class Configuration
         $this->langCode  = "PT";
         $this->cacheWsdl = WSDL_CACHE_BOTH;
 
-        $fields = [
+        $fields = array(
             'environment',
             'privateKey',
             'clientId',
             'platformCode',
             'langCode',
             'platformInfo'
-        ];
+        );
 
         foreach ($fields as $fvalue) {
             if (isset($attribs[$fvalue]) && $attribs[$fvalue] != '')  {

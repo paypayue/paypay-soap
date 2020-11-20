@@ -363,15 +363,15 @@ final class PayPayWebservice extends \SoapClient
 
     /**
      * Calls the PayPay Webservice to check the state of multiple payments.
-     * @param   array                         $payments [description]
-     * @return  ResponseEntityPaymentsDetails             Webservice Response
+     * @param   array  $payments List of payments to check
+     * @return  ResponseEntityPaymentsDetails Webservice Response
      */
     public function checkEntityPayments($payments = array())
     {
         $requestReferenceDetails = new Structure\RequestEntityPayments();
         if ($payments) {
             foreach ($payments as $key => $value) {
-                $requestPayment = is_a($value, RequestReferenceDetails::class) ? $value : new RequestReferenceDetails($value);
+                $requestPayment = $value instanceof RequestReferenceDetails ? $value : new RequestReferenceDetails($value);
                 $requestReferenceDetails->addPayment($requestPayment);
             }
         }
@@ -421,7 +421,7 @@ final class PayPayWebservice extends \SoapClient
      * @param  array  $payments
      * @return ResponseEntityPaymentReferences      Webservice Response
      */
-    public function saveEntityPayments($payments = [])
+    public function saveEntityPayments($payments = array())
     {
         $this->response = parent::saveEntityPayments($this->entity, $payments);
 

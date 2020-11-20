@@ -16,7 +16,7 @@ class RequestEntity
     /** @var array */
     public $info;
 
-    public function __construct($platformCode, $hash, $date, $nif, $lang = null, $info = [])
+    public function __construct($platformCode, $hash, $date, $nif, $lang = null, $info = array())
     {
         $this->platformCode = $platformCode;
         $this->hash         = $hash;
