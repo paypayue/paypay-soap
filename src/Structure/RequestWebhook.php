@@ -6,6 +6,7 @@ class RequestWebhook
     const PAYMENT_CONFIRMED = 'payment_confirmed';
     const PAYMENT_EXPIRED   = 'payment_expired';
     const PAYMENT_CANCELLED = 'payment_cancelled';
+    const PAYMENT_REFUNDED = 'payment_refunded';
 
     /** @var string */
     public $action;
