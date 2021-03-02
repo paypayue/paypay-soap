@@ -49,8 +49,8 @@ class WebhookHandler
         }
         if (empty($this->hookHash)) {
             throw new Exception\Webhook('Webhook::hookHash needs to be set.', 400);
-        } else if (!$this->isValidHookHash($config->getPrivateKey())) {
-            throw new Exception\Webhook('Webhook::hookHash is not valid.', 403);
+        } else if (!$this->hasValidSignature($config->getPrivateKey())) {
+            throw new Exception\Webhook('Webhook::signature is not valid.', 403);
         }
     }
 
@@ -73,10 +73,19 @@ class WebhookHandler
      * @param  string  $privateKey
      * @return boolean
      */
-    private function isValidHookHash($privateKey)
+    private function hasValidSignature($privateKey)
     {
-        $confirmationHash = hash('sha256', $privateKey.$this->hookAction.$this->hookDate);
+        if (!isset($_SERVER['HTTP_PAYPAY_SIGNATURE'])) {
+            return false;
+        }
 
-        return ($this->hookHash === $confirmationHash);
+        $body = file_get_contents("php://input");
+
+        $signature = str_replace(',', '&', $_SERVER['HTTP_PAYPAY_SIGNATURE']);
+
+        parse_str($signature, $output);
+
+        return (int)($output['ts']) > (time() - 1800) &&
+            hash_equals($output['hash'], hash_hmac('sha256', $body.$output['ts'], $privateKey));
     }
 }
