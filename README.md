@@ -1,3 +1,5 @@
+# Repo has been discontinued, please check out the [REST API documentation](https://paypay.pt/paypay/public/api/)
+
 # PayPay PHP SOAP Library
 
 Official library for PayPay SOAP API integrations written in PHP.
